@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CESFA — Centro Educacional São Francisco de Assis</title>
+<meta name="description" content="Centro Educacional São Francisco de Assis — Obra Social da Diocese de Caxias-MA. Educação, fé e transformação social.">
+<link rel="icon" type="image/png" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="nav" id="navbar">
+  <div class="nav__inner">
+    <a href="#" class="nav__logo">
+      <div class="nav__logo-img">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--accent),var(--primary));display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:900;font-size:1.3rem;color:#fff">C</div>
+      </div>
+      <div class="nav__logo-text">
+        CESFA
+        <small>Obra Social da Diocese de Caxias-MA</small>
+      </div>
+    </a>
+    <div class="nav__links">
+      <a href="#quem-somos" class="nav__link">Quem Somos</a>
+      <a href="#historia" class="nav__link">História</a>
+      <a href="#atuacao" class="nav__link">Atuação</a>
+      <a href="#eventos" class="nav__link">Eventos</a>
+      <a href="#galeria" class="nav__link">Galeria</a>
+      <a href="#noticias" class="nav__link">Notícias</a>
+      <a href="#" class="nav__link" onclick="openLogin();return false">Entrar</a>
+    </div>
+    <div class="nav__social">
+      <a href="https://instagram.com/c.e.saofranciscodeassis" target="_blank" title="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="#" title="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://wa.me/5599999999999" target="_blank" title="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+      <a href="#" title="YouTube">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+    </div>
+    <button class="nav__mobile" onclick="toggleMobile()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu__close" onclick="toggleMobile()">✕</button>
+  <a href="#quem-somos" onclick="toggleMobile()">Quem Somos</a>
+  <a href="#historia" onclick="toggleMobile()">História</a>
+  <a href="#atuacao" onclick="toggleMobile()">Atuação</a>
+  <a href="#eventos" onclick="toggleMobile()">Eventos</a>
+  <a href="#galeria" onclick="toggleMobile()">Galeria</a>
+  <a href="#noticias" onclick="toggleMobile()">Notícias</a>
+  <a href="#" onclick="toggleMobile();openLogin()">Entrar</a>
+</div>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__inner">
+      <div class="hero__content">
+        <h1 class="hero__title">Valores CESFA:<br>Educação, Fé e<br>Transformação Social</h1>
+        <a href="#quem-somos" class="hero__btn">Saiba Mais</a>
+      </div>
+      <div class="hero__image">
+        <div class="hero__image-bg">
+          <div class="hero__values-grid">
+            <div class="hero__value">
+              <div class="hero__value-icon hero__value-icon--1">🙏</div>
+              <div class="hero__value-name">Espiritualidade</div>
+            </div>
+            <div class="hero__value">
+              <div class="hero__value-icon hero__value-icon--2">💪</div>
+              <div class="hero__value-name">Compromisso</div>
+            </div>
+            <div class="hero__value">
+              <div class="hero__value-icon hero__value-icon--3">🤝</div>
+              <div class="hero__value-name">Solidariedade</div>
+            </div>
+            <div class="hero__value">
+              <div class="hero__value-icon hero__value-icon--4">🌿</div>
+              <div class="hero__value-name">Simplicidade</div>
+            </div>
+            <div class="hero__value">
+              <div class="hero__value-icon hero__value-icon--5">👨‍👩‍👧‍👦</div>
+              <div class="hero__value-name">Família</div>
+            </div>
+            <div class="hero__value">
+              <div class="hero__value-icon hero__value-icon--6">🌍</div>
+              <div class="hero__value-name">Presença</div>
+            </div>
+          </div>
+          <div class="hero__brand">
+            <div class="hero__brand-logo">CESFA</div>
+            <div class="hero__brand-text">Valores CESFA!<br>Educação, Fé e<br>Transformação Social.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero__dots">
+    <div class="hero__dot active"></div>
+    <div class="hero__dot"></div>
+    <div class="hero__dot"></div>
+  </div>
+</section>
+
+<!-- ════════ QUEM SOMOS ════════ -->
+<section class="section" id="quem-somos">
+  <div class="container">
+    <div class="about__grid">
+      <div class="about__text reveal">
+        <h2 class="section__title">QUEM SOMOS</h2>
+        <p>O Centro Educacional São Francisco de Assis (CESFA) é uma Obra Social da Diocese de Caxias-MA, que tem como propósito inspirar vidas para transformar comunidades, formando cidadãos conscientes por meio dos princípios cristãos e do Carisma Franciscano.</p>
+        <p>A proposta pedagógica do CESFA promove formação integral, conectando os valores de São Francisco de Assis a uma aprendizagem significativa. Educação que une evangelização, compromisso social, excelência acadêmica e a promoção da vida e defesa dos direitos das crianças, adolescentes e jovens.</p>
+        <p>Os estudantes do CESFA são capazes de navegar na imprevisibilidade com coragem, liderar com propósito e colaborar em ambientes diversos. Mais do que um centro educacional, o CESFA é um centro de transformação, comprometido com a construção de um futuro mais justo, inclusivo e humano.</p>
+      </div>
+      <div class="about__image reveal reveal-d1">
+        <div class="about__image-inner">
+          <span style="font-size:4rem;opacity:.3">🏫</span>
+          <div class="about__image-overlay">...que se move pelo propósito de transformar vidas</div>
+          <div class="about__image-logo">
+            <span style="color:var(--accent);font-size:1rem">✦</span> CESFA
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ NOSSA HISTÓRIA ════════ -->
+<section class="section section--cream" id="historia">
+  <div class="container">
+    <div class="history__grid">
+      <div class="history__gallery reveal">
+        <div class="history__main-img">
+          <span class="history__main-img-placeholder">⛪</span>
+        </div>
+        <div class="history__thumbs">
+          <div class="history__thumb active">🙏</div>
+          <div class="history__thumb">📖</div>
+          <div class="history__thumb">🕊️</div>
+          <div class="history__thumb">✝️</div>
+          <div class="history__thumb">🏠</div>
+        </div>
+      </div>
+      <div class="history__content reveal reveal-d1">
+        <h2 class="section__title">NOSSA HISTÓRIA</h2>
+        <p class="history__text">Motivado pelo espírito solidário e por sua profunda conexão com a fé, a Diocese de Caxias-MA fundou o CESFA em 2008, inspirada pelas ações da Pastoral da Criança nos bairros Seriema, São Francisco, Teso Duro e Bacuri.</p>
+        <p class="history__text">A obra foi realizada com ajuda dos benfeitores italianos na Missão de Dom Frei Luis D'Ándrea, 3º Bispo Diocesano de Caxias. Inaugurado em 09 de agosto de 2008, o projeto nasceu para atender crianças em situação de vulnerabilidade.</p>
+        <p class="history__text">A comunidade educacional do CESFA cresceu e expandiu seus horizontes, passando a atender também adolescentes e mulheres. O CESFA busca fortalecer os valores fundamentais: presença, simplicidade, solidariedade, espiritualidade e compromisso social.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ NOSSA ATUAÇÃO ════════ -->
+<section class="section" id="atuacao">
+  <div class="container">
+    <h2 class="section__title reveal">NOSSA ATUAÇÃO</h2>
+    <div style="height:36px"></div>
+    <div class="programs__grid">
+      <div class="program-card reveal">
+        <div class="program-card__img" style="background:linear-gradient(135deg,#7A5230,#5C3A1E)">
+          <span class="program-card__img-placeholder">📚</span>
+        </div>
+        <div class="program-card__body">
+          <h3 class="program-card__title">Reforço Escolar</h3>
+          <p class="program-card__desc">Apoio pedagógico para crianças e adolescentes, com educação de excelência lado a lado com valores solidários. O desenvolvimento dos estudantes acontece de forma integral desde cedo.</p>
+        </div>
+      </div>
+      <div class="program-card reveal reveal-d1">
+        <div class="program-card__img" style="background:linear-gradient(135deg,#3A6B1E,#2D5016)">
+          <span class="program-card__img-placeholder">🤝</span>
+        </div>
+        <div class="program-card__body">
+          <h3 class="program-card__title">Formação Cristã</h3>
+          <p class="program-card__desc">Catequese e formação na fé, em regiões pouco atendidas, para o maior número de jovens possível, desenvolvendo suas habilidades, autonomia e trabalho em equipe.</p>
+        </div>
+      </div>
+      <div class="program-card reveal reveal-d2">
+        <div class="program-card__img" style="background:linear-gradient(135deg,#C59A3F,#A0632E)">
+          <span class="program-card__img-placeholder">👩‍🏫</span>
+        </div>
+        <div class="program-card__body">
+          <h3 class="program-card__title">Capacitação Comunitária</h3>
+          <p class="program-card__desc">Programas dedicados às mulheres e jovens da comunidade, com foco em autonomia, capacitação profissional e fortalecimento dos vínculos familiares.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FIQUE POR DENTRO ════════ -->
+<section class="section highlights" id="destaques">
+  <div class="container">
+    <div class="highlights__header reveal">
+      <h2 class="section__title">FIQUE POR DENTRO</h2>
+      <p class="section__subtitle">Conteúdos dedicados à educação, criado para dialogar com pais, educadores e estudantes sobre os desafios dos novos tempos.</p>
+    </div>
+    <div class="highlights__scroll">
+      <div class="highlight-card reveal">
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#5C3A1E,#7A5230)"><span class="highlight-card__img-placeholder">📱</span></div>
+        <div class="highlight-card__body">
+          <h3 class="highlight-card__title">A rotina de estudos do estudante CESFA aprovado em destaque</h3>
+          <a href="#" class="highlight-card__link">Leia Mais</a>
+        </div>
+      </div>
+      <div class="highlight-card reveal reveal-d1">
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#3A6B1E,#4A8528)"><span class="highlight-card__img-placeholder">🎓</span></div>
+        <div class="highlight-card__body">
+          <h3 class="highlight-card__title">Atividades culturais promovem integração e aprendizagem</h3>
+          <a href="#" class="highlight-card__link">Leia Mais</a>
+        </div>
+      </div>
+      <div class="highlight-card reveal reveal-d2">
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#C59A3F,#D4AC5A)"><span class="highlight-card__img-placeholder">♻️</span></div>
+        <div class="highlight-card__body">
+          <h3 class="highlight-card__title">CESFA promove projeto sustentável na comunidade</h3>
+          <a href="#" class="highlight-card__link">Leia Mais</a>
+        </div>
+      </div>
+      <div class="highlight-card reveal reveal-d3">
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#A0522D,#7A5230)"><span class="highlight-card__img-placeholder">🏆</span></div>
+        <div class="highlight-card__body">
+          <h3 class="highlight-card__title">Educador e estudante compartilham dicas para os vestibulares</h3>
+          <a href="#" class="highlight-card__link">Leia Mais</a>
+        </div>
+      </div>
+      <div class="highlight-card reveal">
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#3B2310,#5C3A1E)"><span class="highlight-card__img-placeholder">📖</span></div>
+        <div class="highlight-card__body">
+          <h3 class="highlight-card__title">Retiros espirituais fortalecem a fé dos jovens</h3>
+          <a href="#" class="highlight-card__link">Leia Mais</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ RETIROS & EVENTOS ════════ -->
+<section class="section section--cream" id="eventos">
+  <div class="container">
+    <h2 class="section__title reveal">RETIROS & EVENTOS</h2>
+    <p class="section__subtitle reveal" style="margin-bottom:40px">Momentos de fé, comunhão e fortalecimento espiritual para toda a comunidade.</p>
+    <div class="events__grid">
+      <div class="event-card reveal">
+        <div class="event-card__banner" style="background:linear-gradient(135deg,#2D5016,#4A8528)">
+          <div class="event-card__date"><span class="event-card__date-month">Jun</span><span class="event-card__date-day">15</span></div>
+          <div class="event-card__type">Retiro Espiritual</div>
+        </div>
+        <div class="event-card__body">
+          <h3 class="event-card__title">Retiro de Corpus Christi</h3>
+          <p class="event-card__desc">Três dias de oração, reflexão e renovação espiritual para jovens e adultos da comunidade.</p>
+          <div class="event-card__location">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+            CESFA — Caxias, MA
+          </div>
+        </div>
+      </div>
+      <div class="event-card reveal reveal-d1">
+        <div class="event-card__banner" style="background:linear-gradient(135deg,#7A5230,#C59A3F)">
+          <div class="event-card__date"><span class="event-card__date-month">Jul</span><span class="event-card__date-day">20</span></div>
+          <div class="event-card__type">Encontro</div>
+        </div>
+        <div class="event-card__body">
+          <h3 class="event-card__title">Encontro de Jovens São Francisco</h3>
+          <p class="event-card__desc">Dia inteiro de atividades, palestras motivacionais e dinâmicas de grupo para estudantes.</p>
+          <div class="event-card__location">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+            Auditório CESFA
+          </div>
+        </div>
+      </div>
+      <div class="event-card reveal reveal-d2">
+        <div class="event-card__banner" style="background:linear-gradient(135deg,#3B2310,#5C3A1E)">
+          <div class="event-card__date"><span class="event-card__date-month">Ago</span><span class="event-card__date-day">09</span></div>
+          <div class="event-card__type">Celebração</div>
+        </div>
+        <div class="event-card__body">
+          <h3 class="event-card__title">Aniversário do CESFA — 18 Anos</h3>
+          <p class="event-card__desc">Celebração especial com missa solene, apresentações culturais e confraternização.</p>
+          <div class="event-card__location">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+            CESFA — Caxias, MA
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ GALERIA ════════ -->
+<section class="section" id="galeria">
+  <div class="container">
+    <h2 class="section__title reveal">GALERIA DE FOTOS</h2>
+    <div style="height:28px"></div>
+    <div class="gallery__filter reveal">
+      <button class="gallery__filter-btn active" onclick="filterGallery(this,'todos')">Todos</button>
+      <button class="gallery__filter-btn" onclick="filterGallery(this,'retiros')">Retiros</button>
+      <button class="gallery__filter-btn" onclick="filterGallery(this,'eventos')">Eventos</button>
+      <button class="gallery__filter-btn" onclick="filterGallery(this,'escola')">Escola</button>
+      <button class="gallery__filter-btn" onclick="filterGallery(this,'atividades')">Atividades</button>
+    </div>
+    <div class="gallery__grid">
+      <div class="gallery__item reveal" onclick="openLightbox('Retiro Espiritual 2025')" data-category="retiros">
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#2D5016,#4A8528)">🙏</div>
+        <div class="gallery__item-overlay"><span>Retiro Espiritual 2025</span></div>
+      </div>
+      <div class="gallery__item reveal" onclick="openLightbox('Encontro de Jovens')" data-category="eventos">
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#7A5230,#C59A3F)">🎉</div>
+        <div class="gallery__item-overlay"><span>Encontro de Jovens</span></div>
+      </div>
+      <div class="gallery__item reveal" onclick="openLightbox('Sala de Aula')" data-category="escola">
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#5C3A1E,#A0632E)">📚</div>
+        <div class="gallery__item-overlay"><span>Sala de Aula</span></div>
+      </div>
+      <div class="gallery__item reveal" onclick="openLightbox('Atividades Culturais')" data-category="atividades">
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#C59A3F,#5C3A1E)">🎨</div>
+        <div class="gallery__item-overlay"><span>Atividades Culturais</span></div>
+      </div>
+      <div class="gallery__item reveal" onclick="openLightbox('Missa Solene')" data-category="eventos">
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#3B2310,#7A5230)">⛪</div>
+        <div class="gallery__item-overlay"><span>Missa Solene</span></div>
+      </div>
+      <div class="gallery__item reveal" onclick="openLightbox('Esportes')" data-category="atividades">
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#3A6B1E,#2D5016)">⚽</div>
+        <div class="gallery__item-overlay"><span>Esportes</span></div>
+      </div>
+      <div class="gallery__item reveal" onclick="openLightbox('Retiro de Carnaval')" data-category="retiros">
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#5C3A1E,#D4AC5A)">✝️</div>
+        <div class="gallery__item-overlay"><span>Retiro de Carnaval</span></div>
+      </div>
+      <div class="gallery__item reveal" onclick="openLightbox('Dia das Crianças')" data-category="eventos">
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#D4AC5A,#A0632E)">🎈</div>
+        <div class="gallery__item-overlay"><span>Dia das Crianças</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ ÚLTIMAS NOTÍCIAS ════════ -->
+<section class="section news section--cream" id="noticias">
+  <div class="container">
+    <div class="news__header">
+      <div>
+        <h2 class="section__title reveal">ÚLTIMAS NOTÍCIAS</h2>
+        <p class="section__subtitle reveal">Fique por dentro do que acontece no <strong>CESFA</strong></p>
+      </div>
+      <div class="news__search reveal">
+        <input type="text" placeholder="Faça uma busca">
+        <button><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg></button>
+      </div>
+    </div>
+    <div class="news__grid">
+      <div class="news-card reveal">
+        <div class="news-card__img" style="background:linear-gradient(135deg,#E8C97A,#C59A3F)"><span class="news-card__img-placeholder">🏅</span></div>
+        <div class="news-card__body">
+          <div class="news-card__meta"><span>Comunidade</span><span>08/05/2026</span></div>
+          <h3 class="news-card__title">Inscrições abertas para o segundo semestre de 2026</h3>
+          <p class="news-card__desc">O CESFA está com matrículas abertas para novas turmas. Venha fazer parte da nossa comunidade educacional.</p>
+        </div>
+      </div>
+      <div class="news-card reveal reveal-d1">
+        <div class="news-card__img" style="background:linear-gradient(135deg,#D4AC5A,#7A5230)"><span class="news-card__img-placeholder">🕊️</span></div>
+        <div class="news-card__body">
+          <div class="news-card__meta"><span>CESFA</span><span>29/04/2026</span></div>
+          <h3 class="news-card__title">Dia de São Francisco de Assis: conheça mais sobre a data</h3>
+          <p class="news-card__desc">Celebramos a vida e os valores de São Francisco, patrono da nossa instituição educacional.</p>
+        </div>
+      </div>
+      <div class="news-card reveal reveal-d2">
+        <div class="news-card__img" style="background:linear-gradient(135deg,#5C3A1E,#3B2310)"><span class="news-card__img-placeholder">📋</span></div>
+        <div class="news-card__body">
+          <div class="news-card__meta"><span>CESFA</span><span>22/04/2026</span></div>
+          <h3 class="news-card__title">Conferência livre reúne participantes para debater educação social</h3>
+          <p class="news-card__desc">Educadores e comunidade discutiram desafios e avanços na educação comunitária na região.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PAINÉIS ════════ -->
+<section class="section section--dark" id="paineis">
+  <div class="container">
+    <h2 class="section__title reveal" style="color:var(--white);text-align:center;margin-bottom:48px">PAINÉIS DO ALUNO E PROFESSOR</h2>
+    <div class="panels__grid" style="margin-bottom:64px">
+      <div class="panel-mockup reveal">
+        <div class="panel-mockup__top">
+          <div class="panel-mockup__dot panel-mockup__dot--r"></div>
+          <div class="panel-mockup__dot panel-mockup__dot--y"></div>
+          <div class="panel-mockup__dot panel-mockup__dot--g"></div>
+          <span style="color:rgba(255,255,255,.3);font-family:var(--font-heading);font-size:.72rem;font-weight:600;margin-left:auto">Painel do Aluno</span>
+        </div>
+        <div class="panel-mockup__body">
+          <div class="panel-sidebar">
+            <div class="panel-sidebar__item active">📊 Dashboard</div>
+            <div class="panel-sidebar__item">📚 Meus Cursos</div>
+            <div class="panel-sidebar__item">📁 Materiais</div>
+            <div class="panel-sidebar__item">📅 Calendário</div>
+            <div class="panel-sidebar__item">📢 Anúncios</div>
+            <div class="panel-sidebar__item">📷 Galeria</div>
+          </div>
+          <div class="panel-main">
+            <div class="panel-widget"><div class="panel-widget__label">Cursos</div><div class="panel-widget__value">3</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:75%"></div></div></div>
+            <div class="panel-widget"><div class="panel-widget__label">Progresso</div><div class="panel-widget__value">68%</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:68%"></div></div></div>
+            <div class="panel-widget"><div class="panel-widget__label">Arquivos</div><div class="panel-widget__value">12</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:40%"></div></div></div>
+            <div class="panel-widget"><div class="panel-widget__label">Eventos</div><div class="panel-widget__value">5</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:55%"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-info reveal reveal-d1">
+        <h3>Painel do <span style="color:var(--accent-lighter)">Aluno</span></h3>
+        <p>Uma experiência completa para acompanhar sua jornada educacional no CESFA.</p>
+        <div class="panel-features">
+          <div class="panel-feature">Acessar cursos e materiais didáticos</div>
+          <div class="panel-feature">Acompanhar progresso e notas</div>
+          <div class="panel-feature">Calendário acadêmico integrado</div>
+          <div class="panel-feature">Visualizar anúncios e eventos</div>
+          <div class="panel-feature">Galeria de fotos e momentos</div>
+        </div>
+      </div>
+    </div>
+    <div class="panels__grid" style="direction:rtl">
+      <div class="panel-info reveal" style="direction:ltr">
+        <h3>Painel do <span style="color:var(--accent-lighter)">Professor</span></h3>
+        <p>Ferramentas completas para gerenciar turmas, conteúdos e atividades.</p>
+        <div class="panel-features">
+          <div class="panel-feature">Criar e gerenciar cursos</div>
+          <div class="panel-feature">Publicar materiais e conteúdos</div>
+          <div class="panel-feature">Lançar notas e avaliações</div>
+          <div class="panel-feature">Criar anúncios e comunicados</div>
+          <div class="panel-feature">Gerenciar alunos e turmas</div>
+        </div>
+      </div>
+      <div class="panel-mockup reveal reveal-d1" style="direction:ltr">
+        <div class="panel-mockup__top">
+          <div class="panel-mockup__dot panel-mockup__dot--r"></div>
+          <div class="panel-mockup__dot panel-mockup__dot--y"></div>
+          <div class="panel-mockup__dot panel-mockup__dot--g"></div>
+          <span style="color:rgba(255,255,255,.3);font-family:var(--font-heading);font-size:.72rem;font-weight:600;margin-left:auto">Painel do Professor</span>
+        </div>
+        <div class="panel-mockup__body">
+          <div class="panel-sidebar">
+            <div class="panel-sidebar__item active">📊 Dashboard</div>
+            <div class="panel-sidebar__item">📖 Cursos</div>
+            <div class="panel-sidebar__item">📝 Notas</div>
+            <div class="panel-sidebar__item">📢 Anúncios</div>
+            <div class="panel-sidebar__item">📅 Eventos</div>
+            <div class="panel-sidebar__item">👥 Alunos</div>
+          </div>
+          <div class="panel-main">
+            <div class="panel-widget"><div class="panel-widget__label">Turmas</div><div class="panel-widget__value">5</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:83%"></div></div></div>
+            <div class="panel-widget"><div class="panel-widget__label">Alunos</div><div class="panel-widget__value">148</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:90%"></div></div></div>
+            <div class="panel-widget"><div class="panel-widget__label">Materiais</div><div class="panel-widget__value">32</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:60%"></div></div></div>
+            <div class="panel-widget"><div class="panel-widget__label">Mensagens</div><div class="panel-widget__value">8</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:25%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CTA ════════ -->
+<section class="cta">
+  <div class="container">
+    <h2 class="cta__title reveal">Faça parte da nossa comunidade</h2>
+    <p class="cta__desc reveal">Junte-se ao CESFA e transforme vidas através da educação e da fé.</p>
+    <div class="cta__actions reveal">
+      <a href="#atuacao" class="btn btn--accent">Conheça os Cursos</a>
+      <button onclick="openLogin()" class="btn btn--outline-white">Criar Conta</button>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand-name">Centro Educacional São Francisco de Assis</div>
+        <p class="footer__brand-desc">Obra Social da Diocese de Caxias-MA. Educação, fé e transformação social desde 2008. Atendendo crianças, adolescentes e comunidades nos bairros Seriema, São Francisco, Teso Duro e Bacuri.</p>
+        <div class="footer__social">
+          <a href="https://instagram.com/c.e.saofranciscodeassis" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a href="#"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+          <a href="https://wa.me/5599999999999" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__col-title">Institucional</div>
+        <div class="footer__links">
+          <a href="#quem-somos">Quem Somos</a>
+          <a href="#historia">Nossa História</a>
+          <a href="#atuacao">Atuação</a>
+          <a href="#galeria">Galeria</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__col-title">Acesso</div>
+        <div class="footer__links">
+          <a href="#" onclick="openLogin()">Painel do Aluno</a>
+          <a href="#" onclick="openLogin()">Painel do Professor</a>
+          <a href="#noticias">Notícias</a>
+          <a href="#eventos">Eventos</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__col-title">Contato</div>
+        <div class="footer__links">
+          <a href="#">📍 Caxias, Maranhão</a>
+          <a href="#">📧 contato@cesfa.edu.br</a>
+          <a href="#">📱 (99) 9999-9999</a>
+          <a href="https://instagram.com/c.e.saofranciscodeassis" target="_blank">📸 @c.e.saofranciscodeassis</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Centro Educacional São Francisco de Assis — Todos os direitos reservados.</span>
+      <span>Obra Social da Diocese de Caxias-MA</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════ LOGIN MODAL ════════ -->
+<div class="login-modal" id="loginModal">
+  <div class="login-modal__card">
+    <button class="login-modal__close" onclick="closeLogin()">✕</button>
+    <h2 class="login-modal__title">Bem-vindo ao CESFA</h2>
+    <p class="login-modal__subtitle">Acesse sua conta para continuar</p>
+    <div class="login-modal__tabs">
+      <button class="login-modal__tab active" onclick="switchTab(this)">Aluno</button>
+      <button class="login-modal__tab" onclick="switchTab(this)">Professor</button>
+    </div>
+    <div>
+      <div class="login-modal__field"><label>E-mail</label><input type="email" placeholder="seu@email.com"></div>
+      <div class="login-modal__field"><label>Senha</label><input type="password" placeholder="••••••••"></div>
+      <button class="login-modal__submit">Entrar</button>
+    </div>
+    <div class="login-modal__divider">ou</div>
+    <button class="login-modal__google" id="googleLoginBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continuar com Google
+    </button>
+    <div class="login-modal__forgot"><a href="#">Esqueceu sua senha?</a></div>
+  </div>
+</div>
+
+<!-- ════════ LIGHTBOX ════════ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox__content" id="lightboxContent">📷</div>
+  <div class="lightbox__caption" id="lightboxCaption"></div>
+</div>
+
+<!-- Cookies -->
+<div class="cookies" onclick="this.style.display='none'">
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+  Políticas de cookies
+</div>
+
+<!-- Scroll Top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0})">
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+</button>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/5599999999999" target="_blank" class="whatsapp" title="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="js/script.js"></script>
+</body>
+</html>

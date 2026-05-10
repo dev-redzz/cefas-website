@@ -1,0 +1,8 @@
+node_modules/
+.npm/
+.firebase/
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
