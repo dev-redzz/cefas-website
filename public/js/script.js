@@ -118,12 +118,15 @@ document.querySelector('.login-modal__submit').addEventListener('click', async (
 // VERIFICAR SE ESTA LOGADO
 // ============================================
 auth.onAuthStateChanged((user) => {
-  if (user) {
-    const loginLinks = document.querySelectorAll('[onclick*="openLogin"]');
-    loginLinks.forEach(link => {
-      link.textContent = user.displayName || user.email.split('@')[0];
-      link.removeAttribute('onclick');
-    });
+  const navLinks = document.querySelector('.nav__links');
+  const enterLink = navLinks.querySelector('[onclick*="openLogin"]');
+
+  if (user && enterLink) {
+    const portalLink = document.createElement('a');
+    portalLink.href = 'portal.html';
+    portalLink.className = 'nav__portal';
+    portalLink.textContent = 'Entrar no Portal';
+    enterLink.replaceWith(portalLink);
   }
 });
 
