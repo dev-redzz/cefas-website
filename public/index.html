@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CESFA — Centro Educacional São Francisco de Assis</title>
-<meta name="description" content="Centro Educacional São Francisco de Assis — Obra Social da Diocese de Caxias-MA. Educação, fé e transformação social.">
-<link rel="icon" type="image/png" href="logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CESFA — Centro Educacional São Francisco de Assis</title>
+  <meta name="description" content="Centro Educacional São Francisco de Assis — Obra Social da Diocese de Caxias-MA. Educação, fé e transformação social.">
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- ════════ NAVBAR ════════ -->
+<!-- NAVBAR -->
 <nav class="nav" id="navbar">
   <div class="nav__inner">
     <a href="#" class="nav__logo">
       <div class="nav__logo-img">
-        <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--accent),var(--primary));display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:900;font-size:1.3rem;color:#fff">C</div>
+        <img src="img/logo.png" alt="CESFA Logo">
       </div>
       <div class="nav__logo-text">
         CESFA
@@ -39,9 +39,6 @@
       <a href="#" title="Facebook">
         <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
       </a>
-      <a href="https://wa.me/5599999999999" target="_blank" title="WhatsApp">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      </a>
       <a href="#" title="YouTube">
         <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       </a>
@@ -54,7 +51,7 @@
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-menu__close" onclick="toggleMobile()">✕</button>
+  <button class="mobile-menu__close" onclick="toggleMobile()">&#x2715;</button>
   <a href="#quem-somos" onclick="toggleMobile()">Quem Somos</a>
   <a href="#historia" onclick="toggleMobile()">História</a>
   <a href="#atuacao" onclick="toggleMobile()">Atuação</a>
@@ -64,7 +61,7 @@
   <a href="#" onclick="toggleMobile();openLogin()">Entrar</a>
 </div>
 
-<!-- ════════ HERO ════════ -->
+<!-- HERO -->
 <section class="hero">
   <div class="container">
     <div class="hero__inner">
@@ -76,33 +73,29 @@
         <div class="hero__image-bg">
           <div class="hero__values-grid">
             <div class="hero__value">
-              <div class="hero__value-icon hero__value-icon--1">🙏</div>
+              <div class="hero__value-icon hero__value-icon--1"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg></div>
               <div class="hero__value-name">Espiritualidade</div>
             </div>
             <div class="hero__value">
-              <div class="hero__value-icon hero__value-icon--2">💪</div>
+              <div class="hero__value-icon hero__value-icon--2"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
               <div class="hero__value-name">Compromisso</div>
             </div>
             <div class="hero__value">
-              <div class="hero__value-icon hero__value-icon--3">🤝</div>
+              <div class="hero__value-icon hero__value-icon--3"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
               <div class="hero__value-name">Solidariedade</div>
             </div>
             <div class="hero__value">
-              <div class="hero__value-icon hero__value-icon--4">🌿</div>
+              <div class="hero__value-icon hero__value-icon--4"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div>
               <div class="hero__value-name">Simplicidade</div>
             </div>
             <div class="hero__value">
-              <div class="hero__value-icon hero__value-icon--5">👨‍👩‍👧‍👦</div>
+              <div class="hero__value-icon hero__value-icon--5"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div>
               <div class="hero__value-name">Família</div>
             </div>
             <div class="hero__value">
-              <div class="hero__value-icon hero__value-icon--6">🌍</div>
+              <div class="hero__value-icon hero__value-icon--6"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
               <div class="hero__value-name">Presença</div>
             </div>
-          </div>
-          <div class="hero__brand">
-            <div class="hero__brand-logo">CESFA</div>
-            <div class="hero__brand-text">Valores CESFA!<br>Educação, Fé e<br>Transformação Social.</div>
           </div>
         </div>
       </div>
@@ -115,7 +108,7 @@
   </div>
 </section>
 
-<!-- ════════ QUEM SOMOS ════════ -->
+<!-- QUEM SOMOS -->
 <section class="section" id="quem-somos">
   <div class="container">
     <div class="about__grid">
@@ -127,31 +120,28 @@
       </div>
       <div class="about__image reveal reveal-d1">
         <div class="about__image-inner">
-          <span style="font-size:4rem;opacity:.3">🏫</span>
+          <img src="img/logo.png" alt="CESFA" style="width:60%;height:auto;opacity:.85">
           <div class="about__image-overlay">...que se move pelo propósito de transformar vidas</div>
-          <div class="about__image-logo">
-            <span style="color:var(--accent);font-size:1rem">✦</span> CESFA
-          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ════════ NOSSA HISTÓRIA ════════ -->
+<!-- NOSSA HISTÓRIA -->
 <section class="section section--cream" id="historia">
   <div class="container">
     <div class="history__grid">
       <div class="history__gallery reveal">
         <div class="history__main-img">
-          <span class="history__main-img-placeholder">⛪</span>
+          <img src="img/logo.png" alt="CESFA" style="width:50%;height:auto;opacity:.7">
         </div>
         <div class="history__thumbs">
-          <div class="history__thumb active">🙏</div>
-          <div class="history__thumb">📖</div>
-          <div class="history__thumb">🕊️</div>
-          <div class="history__thumb">✝️</div>
-          <div class="history__thumb">🏠</div>
+          <div class="history__thumb active" style="font-size:.8rem;font-family:var(--font-heading);font-weight:700;color:var(--primary)">2008</div>
+          <div class="history__thumb" style="font-size:.8rem;font-family:var(--font-heading);font-weight:700;color:var(--primary)">2012</div>
+          <div class="history__thumb" style="font-size:.8rem;font-family:var(--font-heading);font-weight:700;color:var(--primary)">2016</div>
+          <div class="history__thumb" style="font-size:.8rem;font-family:var(--font-heading);font-weight:700;color:var(--primary)">2020</div>
+          <div class="history__thumb" style="font-size:.8rem;font-family:var(--font-heading);font-weight:700;color:var(--primary)">2026</div>
         </div>
       </div>
       <div class="history__content reveal reveal-d1">
@@ -164,7 +154,7 @@
   </div>
 </section>
 
-<!-- ════════ NOSSA ATUAÇÃO ════════ -->
+<!-- NOSSA ATUAÇÃO -->
 <section class="section" id="atuacao">
   <div class="container">
     <h2 class="section__title reveal">NOSSA ATUAÇÃO</h2>
@@ -172,7 +162,7 @@
     <div class="programs__grid">
       <div class="program-card reveal">
         <div class="program-card__img" style="background:linear-gradient(135deg,#7A5230,#5C3A1E)">
-          <span class="program-card__img-placeholder">📚</span>
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.4)" stroke-width="1.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
         </div>
         <div class="program-card__body">
           <h3 class="program-card__title">Reforço Escolar</h3>
@@ -181,7 +171,7 @@
       </div>
       <div class="program-card reveal reveal-d1">
         <div class="program-card__img" style="background:linear-gradient(135deg,#3A6B1E,#2D5016)">
-          <span class="program-card__img-placeholder">🤝</span>
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.4)" stroke-width="1.5"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         </div>
         <div class="program-card__body">
           <h3 class="program-card__title">Formação Cristã</h3>
@@ -190,7 +180,7 @@
       </div>
       <div class="program-card reveal reveal-d2">
         <div class="program-card__img" style="background:linear-gradient(135deg,#C59A3F,#A0632E)">
-          <span class="program-card__img-placeholder">👩‍🏫</span>
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.4)" stroke-width="1.5"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
         </div>
         <div class="program-card__body">
           <h3 class="program-card__title">Capacitação Comunitária</h3>
@@ -201,7 +191,7 @@
   </div>
 </section>
 
-<!-- ════════ FIQUE POR DENTRO ════════ -->
+<!-- FIQUE POR DENTRO -->
 <section class="section highlights" id="destaques">
   <div class="container">
     <div class="highlights__header reveal">
@@ -210,35 +200,35 @@
     </div>
     <div class="highlights__scroll">
       <div class="highlight-card reveal">
-        <div class="highlight-card__img" style="background:linear-gradient(135deg,#5C3A1E,#7A5230)"><span class="highlight-card__img-placeholder">📱</span></div>
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#5C3A1E,#7A5230)"></div>
         <div class="highlight-card__body">
           <h3 class="highlight-card__title">A rotina de estudos do estudante CESFA aprovado em destaque</h3>
           <a href="#" class="highlight-card__link">Leia Mais</a>
         </div>
       </div>
       <div class="highlight-card reveal reveal-d1">
-        <div class="highlight-card__img" style="background:linear-gradient(135deg,#3A6B1E,#4A8528)"><span class="highlight-card__img-placeholder">🎓</span></div>
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#3A6B1E,#4A8528)"></div>
         <div class="highlight-card__body">
           <h3 class="highlight-card__title">Atividades culturais promovem integração e aprendizagem</h3>
           <a href="#" class="highlight-card__link">Leia Mais</a>
         </div>
       </div>
       <div class="highlight-card reveal reveal-d2">
-        <div class="highlight-card__img" style="background:linear-gradient(135deg,#C59A3F,#D4AC5A)"><span class="highlight-card__img-placeholder">♻️</span></div>
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#C59A3F,#D4AC5A)"></div>
         <div class="highlight-card__body">
           <h3 class="highlight-card__title">CESFA promove projeto sustentável na comunidade</h3>
           <a href="#" class="highlight-card__link">Leia Mais</a>
         </div>
       </div>
       <div class="highlight-card reveal reveal-d3">
-        <div class="highlight-card__img" style="background:linear-gradient(135deg,#A0522D,#7A5230)"><span class="highlight-card__img-placeholder">🏆</span></div>
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#A0522D,#7A5230)"></div>
         <div class="highlight-card__body">
           <h3 class="highlight-card__title">Educador e estudante compartilham dicas para os vestibulares</h3>
           <a href="#" class="highlight-card__link">Leia Mais</a>
         </div>
       </div>
       <div class="highlight-card reveal">
-        <div class="highlight-card__img" style="background:linear-gradient(135deg,#3B2310,#5C3A1E)"><span class="highlight-card__img-placeholder">📖</span></div>
+        <div class="highlight-card__img" style="background:linear-gradient(135deg,#3B2310,#5C3A1E)"></div>
         <div class="highlight-card__body">
           <h3 class="highlight-card__title">Retiros espirituais fortalecem a fé dos jovens</h3>
           <a href="#" class="highlight-card__link">Leia Mais</a>
@@ -248,7 +238,7 @@
   </div>
 </section>
 
-<!-- ════════ RETIROS & EVENTOS ════════ -->
+<!-- RETIROS & EVENTOS -->
 <section class="section section--cream" id="eventos">
   <div class="container">
     <h2 class="section__title reveal">RETIROS & EVENTOS</h2>
@@ -300,7 +290,7 @@
   </div>
 </section>
 
-<!-- ════════ GALERIA ════════ -->
+<!-- GALERIA -->
 <section class="section" id="galeria">
   <div class="container">
     <h2 class="section__title reveal">GALERIA DE FOTOS</h2>
@@ -314,42 +304,42 @@
     </div>
     <div class="gallery__grid">
       <div class="gallery__item reveal" onclick="openLightbox('Retiro Espiritual 2025')" data-category="retiros">
-        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#2D5016,#4A8528)">🙏</div>
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#2D5016,#4A8528)"></div>
         <div class="gallery__item-overlay"><span>Retiro Espiritual 2025</span></div>
       </div>
       <div class="gallery__item reveal" onclick="openLightbox('Encontro de Jovens')" data-category="eventos">
-        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#7A5230,#C59A3F)">🎉</div>
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#7A5230,#C59A3F)"></div>
         <div class="gallery__item-overlay"><span>Encontro de Jovens</span></div>
       </div>
       <div class="gallery__item reveal" onclick="openLightbox('Sala de Aula')" data-category="escola">
-        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#5C3A1E,#A0632E)">📚</div>
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#5C3A1E,#A0632E)"></div>
         <div class="gallery__item-overlay"><span>Sala de Aula</span></div>
       </div>
       <div class="gallery__item reveal" onclick="openLightbox('Atividades Culturais')" data-category="atividades">
-        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#C59A3F,#5C3A1E)">🎨</div>
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#C59A3F,#5C3A1E)"></div>
         <div class="gallery__item-overlay"><span>Atividades Culturais</span></div>
       </div>
       <div class="gallery__item reveal" onclick="openLightbox('Missa Solene')" data-category="eventos">
-        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#3B2310,#7A5230)">⛪</div>
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#3B2310,#7A5230)"></div>
         <div class="gallery__item-overlay"><span>Missa Solene</span></div>
       </div>
       <div class="gallery__item reveal" onclick="openLightbox('Esportes')" data-category="atividades">
-        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#3A6B1E,#2D5016)">⚽</div>
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#3A6B1E,#2D5016)"></div>
         <div class="gallery__item-overlay"><span>Esportes</span></div>
       </div>
       <div class="gallery__item reveal" onclick="openLightbox('Retiro de Carnaval')" data-category="retiros">
-        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#5C3A1E,#D4AC5A)">✝️</div>
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#5C3A1E,#D4AC5A)"></div>
         <div class="gallery__item-overlay"><span>Retiro de Carnaval</span></div>
       </div>
       <div class="gallery__item reveal" onclick="openLightbox('Dia das Crianças')" data-category="eventos">
-        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#D4AC5A,#A0632E)">🎈</div>
+        <div class="gallery__item-inner" style="background:linear-gradient(135deg,#D4AC5A,#A0632E)"></div>
         <div class="gallery__item-overlay"><span>Dia das Crianças</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ════════ ÚLTIMAS NOTÍCIAS ════════ -->
+<!-- ÚLTIMAS NOTÍCIAS -->
 <section class="section news section--cream" id="noticias">
   <div class="container">
     <div class="news__header">
@@ -364,7 +354,7 @@
     </div>
     <div class="news__grid">
       <div class="news-card reveal">
-        <div class="news-card__img" style="background:linear-gradient(135deg,#E8C97A,#C59A3F)"><span class="news-card__img-placeholder">🏅</span></div>
+        <div class="news-card__img" style="background:linear-gradient(135deg,#E8C97A,#C59A3F)"></div>
         <div class="news-card__body">
           <div class="news-card__meta"><span>Comunidade</span><span>08/05/2026</span></div>
           <h3 class="news-card__title">Inscrições abertas para o segundo semestre de 2026</h3>
@@ -372,7 +362,7 @@
         </div>
       </div>
       <div class="news-card reveal reveal-d1">
-        <div class="news-card__img" style="background:linear-gradient(135deg,#D4AC5A,#7A5230)"><span class="news-card__img-placeholder">🕊️</span></div>
+        <div class="news-card__img" style="background:linear-gradient(135deg,#D4AC5A,#7A5230)"></div>
         <div class="news-card__body">
           <div class="news-card__meta"><span>CESFA</span><span>29/04/2026</span></div>
           <h3 class="news-card__title">Dia de São Francisco de Assis: conheça mais sobre a data</h3>
@@ -380,7 +370,7 @@
         </div>
       </div>
       <div class="news-card reveal reveal-d2">
-        <div class="news-card__img" style="background:linear-gradient(135deg,#5C3A1E,#3B2310)"><span class="news-card__img-placeholder">📋</span></div>
+        <div class="news-card__img" style="background:linear-gradient(135deg,#5C3A1E,#3B2310)"></div>
         <div class="news-card__body">
           <div class="news-card__meta"><span>CESFA</span><span>22/04/2026</span></div>
           <h3 class="news-card__title">Conferência livre reúne participantes para debater educação social</h3>
@@ -391,88 +381,7 @@
   </div>
 </section>
 
-<!-- ════════ PAINÉIS ════════ -->
-<section class="section section--dark" id="paineis">
-  <div class="container">
-    <h2 class="section__title reveal" style="color:var(--white);text-align:center;margin-bottom:48px">PAINÉIS DO ALUNO E PROFESSOR</h2>
-    <div class="panels__grid" style="margin-bottom:64px">
-      <div class="panel-mockup reveal">
-        <div class="panel-mockup__top">
-          <div class="panel-mockup__dot panel-mockup__dot--r"></div>
-          <div class="panel-mockup__dot panel-mockup__dot--y"></div>
-          <div class="panel-mockup__dot panel-mockup__dot--g"></div>
-          <span style="color:rgba(255,255,255,.3);font-family:var(--font-heading);font-size:.72rem;font-weight:600;margin-left:auto">Painel do Aluno</span>
-        </div>
-        <div class="panel-mockup__body">
-          <div class="panel-sidebar">
-            <div class="panel-sidebar__item active">📊 Dashboard</div>
-            <div class="panel-sidebar__item">📚 Meus Cursos</div>
-            <div class="panel-sidebar__item">📁 Materiais</div>
-            <div class="panel-sidebar__item">📅 Calendário</div>
-            <div class="panel-sidebar__item">📢 Anúncios</div>
-            <div class="panel-sidebar__item">📷 Galeria</div>
-          </div>
-          <div class="panel-main">
-            <div class="panel-widget"><div class="panel-widget__label">Cursos</div><div class="panel-widget__value">3</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:75%"></div></div></div>
-            <div class="panel-widget"><div class="panel-widget__label">Progresso</div><div class="panel-widget__value">68%</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:68%"></div></div></div>
-            <div class="panel-widget"><div class="panel-widget__label">Arquivos</div><div class="panel-widget__value">12</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:40%"></div></div></div>
-            <div class="panel-widget"><div class="panel-widget__label">Eventos</div><div class="panel-widget__value">5</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:55%"></div></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="panel-info reveal reveal-d1">
-        <h3>Painel do <span style="color:var(--accent-lighter)">Aluno</span></h3>
-        <p>Uma experiência completa para acompanhar sua jornada educacional no CESFA.</p>
-        <div class="panel-features">
-          <div class="panel-feature">Acessar cursos e materiais didáticos</div>
-          <div class="panel-feature">Acompanhar progresso e notas</div>
-          <div class="panel-feature">Calendário acadêmico integrado</div>
-          <div class="panel-feature">Visualizar anúncios e eventos</div>
-          <div class="panel-feature">Galeria de fotos e momentos</div>
-        </div>
-      </div>
-    </div>
-    <div class="panels__grid" style="direction:rtl">
-      <div class="panel-info reveal" style="direction:ltr">
-        <h3>Painel do <span style="color:var(--accent-lighter)">Professor</span></h3>
-        <p>Ferramentas completas para gerenciar turmas, conteúdos e atividades.</p>
-        <div class="panel-features">
-          <div class="panel-feature">Criar e gerenciar cursos</div>
-          <div class="panel-feature">Publicar materiais e conteúdos</div>
-          <div class="panel-feature">Lançar notas e avaliações</div>
-          <div class="panel-feature">Criar anúncios e comunicados</div>
-          <div class="panel-feature">Gerenciar alunos e turmas</div>
-        </div>
-      </div>
-      <div class="panel-mockup reveal reveal-d1" style="direction:ltr">
-        <div class="panel-mockup__top">
-          <div class="panel-mockup__dot panel-mockup__dot--r"></div>
-          <div class="panel-mockup__dot panel-mockup__dot--y"></div>
-          <div class="panel-mockup__dot panel-mockup__dot--g"></div>
-          <span style="color:rgba(255,255,255,.3);font-family:var(--font-heading);font-size:.72rem;font-weight:600;margin-left:auto">Painel do Professor</span>
-        </div>
-        <div class="panel-mockup__body">
-          <div class="panel-sidebar">
-            <div class="panel-sidebar__item active">📊 Dashboard</div>
-            <div class="panel-sidebar__item">📖 Cursos</div>
-            <div class="panel-sidebar__item">📝 Notas</div>
-            <div class="panel-sidebar__item">📢 Anúncios</div>
-            <div class="panel-sidebar__item">📅 Eventos</div>
-            <div class="panel-sidebar__item">👥 Alunos</div>
-          </div>
-          <div class="panel-main">
-            <div class="panel-widget"><div class="panel-widget__label">Turmas</div><div class="panel-widget__value">5</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:83%"></div></div></div>
-            <div class="panel-widget"><div class="panel-widget__label">Alunos</div><div class="panel-widget__value">148</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:90%"></div></div></div>
-            <div class="panel-widget"><div class="panel-widget__label">Materiais</div><div class="panel-widget__value">32</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:60%"></div></div></div>
-            <div class="panel-widget"><div class="panel-widget__label">Mensagens</div><div class="panel-widget__value">8</div><div class="panel-widget__bar"><div class="panel-widget__bar-fill" style="width:25%"></div></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════ CTA ════════ -->
+<!-- CTA -->
 <section class="cta">
   <div class="container">
     <h2 class="cta__title reveal">Faça parte da nossa comunidade</h2>
@@ -484,7 +393,7 @@
   </div>
 </section>
 
-<!-- ════════ FOOTER ════════ -->
+<!-- FOOTER -->
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
@@ -494,7 +403,6 @@
         <div class="footer__social">
           <a href="https://instagram.com/c.e.saofranciscodeassis" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
           <a href="#"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-          <a href="https://wa.me/5599999999999" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
         </div>
       </div>
       <div>
@@ -518,24 +426,24 @@
       <div>
         <div class="footer__col-title">Contato</div>
         <div class="footer__links">
-          <a href="#">📍 Caxias, Maranhão</a>
-          <a href="#">📧 contato@cesfa.edu.br</a>
-          <a href="#">📱 (99) 9999-9999</a>
-          <a href="https://instagram.com/c.e.saofranciscodeassis" target="_blank">📸 @c.e.saofranciscodeassis</a>
+          <a href="#">Caxias, Maranhão</a>
+          <a href="#">contato@cesfa.edu.br</a>
+          <a href="#">(99) 9999-9999</a>
+          <a href="https://instagram.com/c.e.saofranciscodeassis" target="_blank">@c.e.saofranciscodeassis</a>
         </div>
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© 2026 Centro Educacional São Francisco de Assis — Todos os direitos reservados.</span>
+      <span>&copy; 2026 Centro Educacional São Francisco de Assis — Todos os direitos reservados.</span>
       <span>Obra Social da Diocese de Caxias-MA</span>
     </div>
   </div>
 </footer>
 
-<!-- ════════ LOGIN MODAL ════════ -->
+<!-- LOGIN MODAL -->
 <div class="login-modal" id="loginModal">
   <div class="login-modal__card">
-    <button class="login-modal__close" onclick="closeLogin()">✕</button>
+    <button class="login-modal__close" onclick="closeLogin()">&#x2715;</button>
     <h2 class="login-modal__title">Bem-vindo ao CESFA</h2>
     <p class="login-modal__subtitle">Acesse sua conta para continuar</p>
     <div class="login-modal__tabs">
@@ -544,7 +452,7 @@
     </div>
     <div>
       <div class="login-modal__field"><label>E-mail</label><input type="email" placeholder="seu@email.com"></div>
-      <div class="login-modal__field"><label>Senha</label><input type="password" placeholder="••••••••"></div>
+      <div class="login-modal__field"><label>Senha</label><input type="password" placeholder="********"></div>
       <button class="login-modal__submit">Entrar</button>
     </div>
     <div class="login-modal__divider">ou</div>
@@ -556,28 +464,27 @@
   </div>
 </div>
 
-<!-- ════════ LIGHTBOX ════════ -->
+<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
-  <button class="lightbox__close" onclick="closeLightbox()">✕</button>
-  <div class="lightbox__content" id="lightboxContent">📷</div>
+  <button class="lightbox__close" onclick="closeLightbox()">&#x2715;</button>
+  <div class="lightbox__content" id="lightboxContent"></div>
   <div class="lightbox__caption" id="lightboxCaption"></div>
 </div>
 
-<!-- Cookies -->
-<div class="cookies" onclick="this.style.display='none'">
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-  Políticas de cookies
+<!-- COOKIES BANNER -->
+<div class="cookies" id="cookiesBanner">
+  <div class="cookies__text">
+    <strong>Politicas de Cookies</strong>
+    <p>Este site utiliza cookies para melhorar sua experiencia. Ao continuar navegando, voce concorda com nossa politica de privacidade.</p>
+  </div>
+  <button class="cookies__accept" onclick="acceptCookies()">Aceitar</button>
+  <button class="cookies__decline" onclick="declineCookies()">Recusar</button>
 </div>
 
 <!-- Scroll Top -->
-<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0})">
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
 </button>
-
-<!-- WhatsApp -->
-<a href="https://wa.me/5599999999999" target="_blank" class="whatsapp" title="WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-</a>
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

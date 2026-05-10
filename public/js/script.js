@@ -136,3 +136,23 @@ function logout() {
     window.location.reload();
   });
 }
+
+// ============================================
+// COOKIES BANNER
+// ============================================
+function acceptCookies() {
+  document.getElementById('cookiesBanner').classList.add('hidden');
+  try { localStorage.setItem('cesfa_cookies', 'accepted'); } catch(e) {}
+}
+
+function declineCookies() {
+  document.getElementById('cookiesBanner').classList.add('hidden');
+  try { localStorage.setItem('cesfa_cookies', 'declined'); } catch(e) {}
+}
+
+// Hide cookies banner if already answered
+try {
+  if (localStorage.getItem('cesfa_cookies')) {
+    document.getElementById('cookiesBanner').classList.add('hidden');
+  }
+} catch(e) {}

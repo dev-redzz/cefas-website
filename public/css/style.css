@@ -279,10 +279,17 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .lightbox__close:hover{background:rgba(255,255,255,.2)}
 .lightbox__caption{color:rgba(255,255,255,.6);font-size:.9rem;text-align:center;font-family:var(--font-heading);font-weight:600}
 
-/* ══════ COOKIES BAR ══════ */
-.cookies{position:fixed;bottom:0;left:0;z-index:800;padding:14px 24px;background:rgba(42,24,9,.9);backdrop-filter:blur(10px);border-radius:0 8px 0 0;display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.7);font-size:.82rem;cursor:pointer;transition:var(--transition)}
-.cookies:hover{background:rgba(42,24,9,.95)}
-.cookies svg{width:20px;height:20px;color:var(--accent-lighter)}
+/* ══════ COOKIES BANNER ══════ */
+.cookies{position:fixed;bottom:0;left:0;right:0;z-index:800;padding:20px 28px;background:rgba(42,24,9,.95);backdrop-filter:blur(10px);display:flex;align-items:center;gap:20px;color:rgba(255,255,255,.85);font-size:.88rem;transition:transform .4s ease}
+.cookies.hidden{transform:translateY(100%)}
+.cookies__text{flex:1}
+.cookies__text strong{display:block;font-family:var(--font-heading);font-size:.9rem;font-weight:700;color:var(--white);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.cookies__text p{margin:0;font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.5}
+.cookies__accept,.cookies__decline{padding:10px 24px;border-radius:6px;font-family:var(--font-heading);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;transition:var(--transition);cursor:pointer;border:none;white-space:nowrap}
+.cookies__accept{background:var(--accent);color:var(--primary-dark)}
+.cookies__accept:hover{background:var(--accent-light)}
+.cookies__decline{background:transparent;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.7)}
+.cookies__decline:hover{border-color:rgba(255,255,255,.5);color:var(--white)}
 
 /* ══════ WHATSAPP ══════ */
 .whatsapp{position:fixed;bottom:28px;right:88px;z-index:900;width:52px;height:52px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);transition:var(--transition)}
@@ -320,6 +327,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   .panel-sidebar{flex-direction:row;flex-wrap:wrap}
   .news__header{flex-direction:column}
   .hero__values-grid{grid-template-columns:repeat(3,1fr);gap:10px;padding:24px}
+  .cookies{flex-direction:column;text-align:center;gap:12px}
+  .cookies__text{text-align:center}
 }
 @media(max-width:480px){
   .gallery__grid{grid-template-columns:1fr 1fr}
