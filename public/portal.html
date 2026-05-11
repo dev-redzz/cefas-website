@@ -9,235 +9,454 @@
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     :root{
-      --primary:#5C3A1E;--primary-dark:#3B2310;--primary-deeper:#2A1809;
+      --primary:#5C3A1E;--primary-dark:#3B2310;--primary-deeper:#2A1809;--primary-light:#7A5230;
       --accent:#C59A3F;--accent-light:#D4AC5A;--accent-lighter:#E8C97A;
-      --cream:#FDF8F0;--cream-dark:#F5ECE0;--white:#FFFFFF;
+      --cream:#FDF8F0;--cream-dark:#F5ECE0;--cream-darker:#EDE0CE;--white:#FFFFFF;
       --text:#1A0F0A;--text-secondary:#5A4535;--text-muted:#8A7565;
-      --shadow-sm:0 2px 8px rgba(60,35,16,.08);--shadow-md:0 4px 20px rgba(60,35,16,.12);
+      --green:#2D7D3A;--green-light:#E8F5E9;--red:#C62828;--red-light:#FFEBEE;
+      --orange:#E65100;--orange-light:#FFF3E0;--blue:#1565C0;--blue-light:#E3F2FD;
+      --shadow-sm:0 2px 8px rgba(60,35,16,.06);--shadow-md:0 4px 20px rgba(60,35,16,.1);--shadow-lg:0 8px 40px rgba(60,35,16,.14);
       --font-heading:'Montserrat',sans-serif;--font-body:'Lora',serif;
+      --radius:12px;--transition:all .25s cubic-bezier(.4,0,.2,1);
     }
-    html{font-size:16px}
-    body{font-family:var(--font-body);color:var(--text);background:var(--cream);min-height:100vh;display:flex}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:var(--font-body);color:var(--text);background:#F7F3EE;min-height:100vh}
     a{text-decoration:none;color:inherit}
     button{cursor:pointer;border:none;background:none;font-family:inherit}
     img{max-width:100%;display:block}
+    input,select,textarea{font-family:var(--font-body);font-size:.9rem}
 
-    /* Sidebar */
-    .sidebar{width:260px;background:var(--primary-deeper);color:var(--white);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
-    .sidebar__header{padding:24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,.06)}
-    .sidebar__logo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.15)}
-    .sidebar__title{font-family:var(--font-heading);font-weight:800;font-size:.95rem;line-height:1.2}
-    .sidebar__title small{display:block;font-size:.6rem;font-weight:500;color:var(--accent-lighter);margin-top:2px;text-transform:uppercase;letter-spacing:.06em}
-    .sidebar__nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px}
-    .sidebar__link{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;font-family:var(--font-heading);font-size:.82rem;font-weight:600;color:rgba(255,255,255,.5);transition:all .2s}
-    .sidebar__link:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
-    .sidebar__link.active{background:rgba(197,154,63,.12);color:var(--accent-lighter)}
-    .sidebar__link svg{width:20px;height:20px;flex-shrink:0}
-    .sidebar__footer{padding:16px 12px;border-top:1px solid rgba(255,255,255,.06)}
+    /* ═══ LOADING ═══ */
+    .loading{position:fixed;inset:0;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
+    .loading__logo{width:80px;height:80px;border-radius:50%;margin-bottom:20px;animation:pulse 1.5s ease infinite}
+    .loading__text{font-family:var(--font-heading);font-size:.9rem;color:var(--text-muted);letter-spacing:.04em}
+    @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:.7}}
+
+    /* ═══ LAYOUT ═══ */
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:260px;background:var(--primary-deeper);color:var(--white);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .3s}
+    .main{flex:1;margin-left:260px;min-height:100vh}
+    .main__content{padding:32px 40px;max-width:1200px}
+
+    /* ═══ SIDEBAR ═══ */
+    .sidebar__header{padding:20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .sidebar__logo{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.12)}
+    .sidebar__brand{font-family:var(--font-heading);font-weight:800;font-size:.9rem}
+    .sidebar__brand small{display:block;font-size:.58rem;font-weight:500;color:var(--accent-lighter);margin-top:1px;text-transform:uppercase;letter-spacing:.06em}
+    .sidebar__nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+    .sidebar__link{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:8px;font-family:var(--font-heading);font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);transition:var(--transition)}
+    .sidebar__link:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.75)}
+    .sidebar__link.active{background:rgba(197,154,63,.1);color:var(--accent-lighter)}
+    .sidebar__link svg{width:19px;height:19px;flex-shrink:0;stroke-width:1.5}
+    .sidebar__link .badge{margin-left:auto;background:var(--red);color:var(--white);font-size:.6rem;font-weight:800;padding:2px 7px;border-radius:10px}
+    .sidebar__divider{height:1px;background:rgba(255,255,255,.06);margin:8px 14px}
+    .sidebar__section{padding:6px 14px;font-family:var(--font-heading);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.2);margin-top:4px}
+    .sidebar__footer{padding:14px 10px;border-top:1px solid rgba(255,255,255,.06)}
     .sidebar__user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px}
-    .sidebar__avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:.85rem;color:var(--primary-dark)}
-    .sidebar__user-info{flex:1}
-    .sidebar__user-name{font-family:var(--font-heading);font-size:.8rem;font-weight:700;color:var(--white)}
-    .sidebar__user-email{font-size:.68rem;color:rgba(255,255,255,.4)}
-    .sidebar__logout{width:100%;margin-top:8px;padding:10px 16px;border-radius:8px;font-family:var(--font-heading);font-size:.78rem;font-weight:700;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:10px;transition:all .2s;text-transform:uppercase;letter-spacing:.04em}
-    .sidebar__logout:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
+    .sidebar__avatar{width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .sidebar__avatar img{width:100%;height:100%;object-fit:cover}
+    .sidebar__avatar--letter{background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:.8rem;color:var(--primary-dark)}
+    .sidebar__uname{font-family:var(--font-heading);font-size:.78rem;font-weight:700;color:var(--white)}
+    .sidebar__uemail{font-size:.65rem;color:rgba(255,255,255,.35)}
+    .sidebar__urole{font-size:.58rem;font-family:var(--font-heading);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+    .sidebar__urole--aluno{color:var(--accent-lighter)}
+    .sidebar__urole--admin{color:#4FC3F7}
+    .sidebar__urole--pendente{color:#FFB74D}
+    .sidebar__logout{width:100%;margin-top:6px;padding:10px 14px;border-radius:8px;font-family:var(--font-heading);font-size:.72rem;font-weight:700;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:9px;transition:var(--transition);text-transform:uppercase;letter-spacing:.04em}
+    .sidebar__logout:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.7)}
+    .sidebar__logout svg{width:17px;height:17px}
 
-    /* Main */
-    .main{flex:1;margin-left:260px;padding:32px 40px}
-    .main__header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
-    .main__greeting{font-family:var(--font-heading);font-size:1.6rem;font-weight:900;color:var(--primary-dark)}
-    .main__greeting span{color:var(--accent)}
-    .main__date{font-size:.85rem;color:var(--text-muted)}
-    .main__back{padding:10px 24px;border-radius:6px;background:var(--primary);color:var(--white);font-family:var(--font-heading);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:all .2s}
-    .main__back:hover{background:var(--primary-dark)}
+    /* ═══ TOP BAR ═══ */
+    .topbar{background:var(--white);border-bottom:1px solid rgba(0,0,0,.04);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+    .topbar__greeting{font-family:var(--font-heading);font-size:1.3rem;font-weight:900;color:var(--primary-dark)}
+    .topbar__greeting span{color:var(--accent)}
+    .topbar__date{font-size:.8rem;color:var(--text-muted);margin-top:2px;font-family:var(--font-heading);font-weight:500}
+    .topbar__actions{display:flex;gap:10px}
+    .topbar__btn{padding:9px 22px;border-radius:8px;font-family:var(--font-heading);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:var(--transition)}
+    .topbar__btn--primary{background:var(--primary);color:var(--white)}
+    .topbar__btn--primary:hover{background:var(--primary-dark)}
+    .topbar__btn--outline{border:1.5px solid var(--cream-darker);color:var(--text-muted)}
+    .topbar__btn--outline:hover{border-color:var(--primary-light);color:var(--primary)}
 
-    /* Cards Grid */
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px}
-    .stat-card{background:var(--white);border-radius:12px;padding:24px;box-shadow:var(--shadow-sm)}
-    .stat-card__label{font-family:var(--font-heading);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:8px}
-    .stat-card__value{font-family:var(--font-heading);font-size:2rem;font-weight:900;color:var(--primary-dark)}
-    .stat-card__bar{height:6px;border-radius:3px;background:var(--cream-dark);margin-top:12px;overflow:hidden}
-    .stat-card__bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent-lighter))}
+    /* ═══ STATS ═══ */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:28px}
+    .stat{background:var(--white);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);transition:var(--transition)}
+    .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+    .stat__icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+    .stat__icon svg{width:20px;height:20px;stroke:var(--white);fill:none;stroke-width:1.5}
+    .stat__label{font-family:var(--font-heading);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:6px}
+    .stat__value{font-family:var(--font-heading);font-size:1.8rem;font-weight:900;color:var(--primary-dark);line-height:1}
+    .stat__bar{height:5px;border-radius:3px;background:var(--cream-dark);margin-top:12px;overflow:hidden}
+    .stat__bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
 
-    /* Content sections */
-    .content-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px}
-    .card{background:var(--white);border-radius:12px;padding:24px;box-shadow:var(--shadow-sm)}
-    .card__title{font-family:var(--font-heading);font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--primary-dark);margin-bottom:20px}
-    .course-item{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--cream-dark)}
-    .course-item:last-child{border-bottom:none}
-    .course-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .course-icon svg{width:22px;height:22px;stroke:var(--white);fill:none;stroke-width:1.5}
-    .course-name{font-family:var(--font-heading);font-size:.82rem;font-weight:700;color:var(--primary-dark)}
-    .course-progress{font-size:.75rem;color:var(--text-muted)}
-    .course-bar{flex:1;max-width:120px;height:6px;border-radius:3px;background:var(--cream-dark);overflow:hidden}
-    .course-bar-fill{height:100%;border-radius:3px;background:var(--accent)}
-    .event-item{padding:14px 0;border-bottom:1px solid var(--cream-dark)}
-    .event-item:last-child{border-bottom:none}
-    .event-date{font-family:var(--font-heading);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:4px}
-    .event-name{font-family:var(--font-heading);font-size:.82rem;font-weight:700;color:var(--primary-dark)}
-    .event-location{font-size:.75rem;color:var(--text-muted);margin-top:2px}
+    /* ═══ CONTENT GRID ═══ */
+    .grid-2{display:grid;grid-template-columns:2fr 1fr;gap:22px}
+    .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden}
+    .card__header{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .card__title{font-family:var(--font-heading);font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--primary-dark)}
+    .card__body{padding:0 24px 24px}
 
-    /* Loading */
-    .loading{display:flex;align-items:center;justify-content:center;min-height:100vh;width:100%;font-family:var(--font-heading);font-size:1rem;color:var(--text-muted)}
+    /* ═══ COURSE LIST ═══ */
+    .course{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--cream-dark)}
+    .course:last-child{border-bottom:none}
+    .course__icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .course__icon svg{width:20px;height:20px;stroke:var(--white);fill:none;stroke-width:1.5}
+    .course__info{flex:1}
+    .course__name{font-family:var(--font-heading);font-size:.8rem;font-weight:700;color:var(--primary-dark)}
+    .course__meta{font-size:.72rem;color:var(--text-muted);margin-top:2px}
+    .course__bar{width:100px;height:5px;border-radius:3px;background:var(--cream-dark);overflow:hidden}
+    .course__bar-fill{height:100%;border-radius:3px}
+    .course__pct{font-family:var(--font-heading);font-size:.72rem;font-weight:700;color:var(--text-muted);width:36px;text-align:right}
 
-    /* Responsive */
+    /* ═══ EVENTS ═══ */
+    .evt{padding:14px 0;border-bottom:1px solid var(--cream-dark)}
+    .evt:last-child{border-bottom:none}
+    .evt__date{font-family:var(--font-heading);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:3px}
+    .evt__name{font-family:var(--font-heading);font-size:.8rem;font-weight:700;color:var(--primary-dark)}
+    .evt__loc{font-size:.72rem;color:var(--text-muted);margin-top:1px}
+
+    /* ═══ COURSES PAGE ═══ */
+    .courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .course-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);transition:var(--transition)}
+    .course-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+    .course-card__img{height:160px;position:relative}
+    .course-card__badge{position:absolute;top:12px;right:12px;padding:4px 12px;border-radius:4px;font-family:var(--font-heading);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--white)}
+    .course-card__body{padding:20px}
+    .course-card__title{font-family:var(--font-heading);font-size:.95rem;font-weight:800;color:var(--primary-dark);margin-bottom:8px;text-transform:uppercase;letter-spacing:.02em}
+    .course-card__desc{font-size:.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px}
+    .course-card__footer{display:flex;gap:8px}
+    .btn{padding:10px 22px;border-radius:8px;font-family:var(--font-heading);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
+    .btn--primary{background:var(--primary);color:var(--white)}
+    .btn--primary:hover{background:var(--primary-dark)}
+    .btn--accent{background:var(--accent);color:var(--primary-dark)}
+    .btn--accent:hover{background:var(--accent-light)}
+    .btn--outline{border:1.5px solid var(--cream-darker);color:var(--text-muted)}
+    .btn--outline:hover{border-color:var(--primary);color:var(--primary)}
+    .btn--sm{padding:8px 16px;font-size:.7rem}
+    .btn--green{background:var(--green);color:var(--white)}
+    .btn--green:hover{background:#256829}
+    .btn--red{background:var(--red);color:var(--white)}
+    .btn--red:hover{background:#9B1E1E}
+
+    /* ═══ MODAL ═══ */
+    .modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(42,24,9,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px}
+    .modal.active{display:flex}
+    .modal__card{background:var(--white);border-radius:var(--radius);width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+    .modal__header{padding:24px 28px 0;display:flex;justify-content:space-between;align-items:flex-start}
+    .modal__title{font-family:var(--font-heading);font-size:1.1rem;font-weight:900;color:var(--primary-dark);text-transform:uppercase;letter-spacing:.02em}
+    .modal__close{width:36px;height:36px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text-muted);transition:var(--transition);flex-shrink:0}
+    .modal__close:hover{background:var(--cream-darker)}
+    .modal__body{padding:20px 28px 28px}
+    .modal__desc{font-size:.9rem;color:var(--text-secondary);line-height:1.7;margin-bottom:20px}
+    .modal__details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+    .modal__detail{padding:14px;background:var(--cream);border-radius:8px}
+    .modal__detail-label{font-family:var(--font-heading);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:4px}
+    .modal__detail-value{font-family:var(--font-heading);font-size:.9rem;font-weight:800;color:var(--primary-dark)}
+
+    /* ═══ FORM ═══ */
+    .form__group{margin-bottom:16px}
+    .form__label{display:block;font-family:var(--font-heading);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-secondary);margin-bottom:5px}
+    .form__input,.form__select,.form__textarea{width:100%;padding:11px 14px;border:1.5px solid var(--cream-darker);border-radius:8px;font-size:.88rem;transition:var(--transition);background:var(--cream)}
+    .form__input:focus,.form__select:focus,.form__textarea:focus{outline:none;border-color:var(--primary-light);background:var(--white)}
+    .form__textarea{min-height:80px;resize:vertical}
+    .form__row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+    /* ═══ ADMIN TABLE ═══ */
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    th{font-family:var(--font-heading);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);padding:12px 16px;text-align:left;border-bottom:2px solid var(--cream-dark);background:var(--cream)}
+    td{padding:14px 16px;border-bottom:1px solid var(--cream-dark);font-size:.85rem;color:var(--text-secondary)}
+    tr:hover td{background:var(--cream)}
+    .status-badge{padding:4px 12px;border-radius:20px;font-family:var(--font-heading);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;display:inline-block}
+    .status-badge--pending{background:var(--orange-light);color:var(--orange)}
+    .status-badge--approved{background:var(--green-light);color:var(--green)}
+    .status-badge--rejected{background:var(--red-light);color:var(--red)}
+    .action-btns{display:flex;gap:6px}
+
+    /* ═══ PENDING SCREEN ═══ */
+    .pending-screen{text-align:center;padding:80px 20px}
+    .pending-screen__icon{width:80px;height:80px;border-radius:50%;background:var(--orange-light);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+    .pending-screen__icon svg{width:40px;height:40px;stroke:var(--orange);fill:none;stroke-width:1.5}
+    .pending-screen__title{font-family:var(--font-heading);font-size:1.4rem;font-weight:900;color:var(--primary-dark);margin-bottom:12px}
+    .pending-screen__desc{font-size:1rem;color:var(--text-muted);max-width:450px;margin:0 auto 32px;line-height:1.7}
+
+    /* ═══ PAGE SECTIONS (hidden by default) ═══ */
+    .page{display:none}
+    .page.active{display:block}
+
+    /* ═══ RESPONSIVE ═══ */
+    @media(max-width:1024px){.stats{grid-template-columns:repeat(2,1fr)}.courses-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:768px){
-      .sidebar{width:100%;position:relative;height:auto}
-      .main{margin-left:0;padding:20px}
-      .stats{grid-template-columns:1fr 1fr}
-      .content-grid{grid-template-columns:1fr}
-      body{flex-direction:column}
+      .sidebar{transform:translateX(-100%);width:280px}
+      .sidebar.open{transform:translateX(0)}
+      .main{margin-left:0}
+      .main__content{padding:20px}
+      .topbar{padding:14px 20px}
+      .stats{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+      .courses-grid{grid-template-columns:1fr}
+      .modal__details{grid-template-columns:1fr}
+      .form__row{grid-template-columns:1fr}
+      .mobile-toggle{display:flex!important}
     }
+    .mobile-toggle{display:none;position:fixed;top:14px;left:14px;z-index:200;width:42px;height:42px;border-radius:8px;background:var(--primary);color:var(--white);align-items:center;justify-content:center;box-shadow:var(--shadow-md)}
+    .mobile-toggle svg{width:22px;height:22px}
   </style>
 </head>
 <body>
 
-<div class="loading" id="loadingScreen">Carregando portal...</div>
+<!-- Loading -->
+<div class="loading" id="loadingScreen">
+  <img src="img/logo.png" alt="CESFA" class="loading__logo">
+  <div class="loading__text">Carregando portal...</div>
+</div>
 
-<div id="portalContent" style="display:none;width:100%">
+<!-- Mobile Toggle -->
+<button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+
+<!-- App -->
+<div class="app" id="app" style="display:none">
 
 <!-- Sidebar -->
 <aside class="sidebar">
   <div class="sidebar__header">
     <img src="img/logo.png" alt="CESFA" class="sidebar__logo">
-    <div class="sidebar__title">CESFA<small>Portal do Aluno</small></div>
+    <div class="sidebar__brand">CESFA<small>Portal Educacional</small></div>
   </div>
   <nav class="sidebar__nav">
-    <a href="#" class="sidebar__link active">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z"/></svg>
+    <div class="sidebar__section">Principal</div>
+    <a href="#" class="sidebar__link active" data-page="dashboard" onclick="showPage('dashboard',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z"/></svg>
       Dashboard
     </a>
-    <a href="#" class="sidebar__link">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
-      Meus Cursos
+    <a href="#" class="sidebar__link" data-page="cursos" onclick="showPage('cursos',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+      Cursos
     </a>
-    <a href="#" class="sidebar__link">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+    <a href="#" class="sidebar__link" data-page="materiais" onclick="showPage('materiais',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
       Materiais
     </a>
-    <a href="#" class="sidebar__link">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+    <a href="#" class="sidebar__link" data-page="calendario" onclick="showPage('calendario',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
       Calendario
     </a>
-    <a href="#" class="sidebar__link">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46"/></svg>
-      Anuncios
-    </a>
-    <a href="#" class="sidebar__link">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M18 8.25h.011M3.75 6A2.25 2.25 0 016 3.75h12A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6z"/></svg>
-      Galeria
+    <div class="sidebar__divider"></div>
+    <div class="sidebar__section" id="adminSection" style="display:none">Administracao</div>
+    <a href="#" class="sidebar__link" data-page="admin" onclick="showPage('admin',this)" id="adminLink" style="display:none">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+      Inscricoes <span class="badge" id="pendingBadge" style="display:none">0</span>
     </a>
   </nav>
   <div class="sidebar__footer">
     <div class="sidebar__user">
-      <div class="sidebar__avatar" id="userAvatar">?</div>
-      <div class="sidebar__user-info">
-        <div class="sidebar__user-name" id="userName">Carregando...</div>
-        <div class="sidebar__user-email" id="userEmail"></div>
+      <div class="sidebar__avatar sidebar__avatar--letter" id="userAvatar">?</div>
+      <div>
+        <div class="sidebar__uname" id="userName">...</div>
+        <div class="sidebar__uemail" id="userEmail"></div>
+        <div class="sidebar__urole sidebar__urole--aluno" id="userRole"></div>
       </div>
     </div>
-    <button class="sidebar__logout" onclick="logout()">
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
-      Sair
+    <button class="sidebar__logout" onclick="doLogout()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
+      Sair da conta
     </button>
   </div>
 </aside>
 
-<!-- Main Content -->
-<main class="main">
-  <div class="main__header">
+<!-- Main -->
+<div class="main">
+
+  <!-- Top Bar -->
+  <div class="topbar">
     <div>
-      <h1 class="main__greeting">Ola, <span id="greetingName">Aluno</span>!</h1>
-      <p class="main__date" id="currentDate"></p>
+      <h1 class="topbar__greeting">Ola, <span id="greetingName">Aluno</span>!</h1>
+      <p class="topbar__date" id="currentDate"></p>
     </div>
-    <a href="index.html" class="main__back">Voltar ao Site</a>
-  </div>
-
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-card__label">Cursos</div>
-      <div class="stat-card__value">3</div>
-      <div class="stat-card__bar"><div class="stat-card__bar-fill" style="width:75%"></div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card__label">Progresso</div>
-      <div class="stat-card__value">68%</div>
-      <div class="stat-card__bar"><div class="stat-card__bar-fill" style="width:68%"></div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card__label">Materiais</div>
-      <div class="stat-card__value">12</div>
-      <div class="stat-card__bar"><div class="stat-card__bar-fill" style="width:40%"></div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card__label">Eventos</div>
-      <div class="stat-card__value">5</div>
-      <div class="stat-card__bar"><div class="stat-card__bar-fill" style="width:55%"></div></div>
+    <div class="topbar__actions">
+      <a href="index.html" class="topbar__btn topbar__btn--outline">Voltar ao Site</a>
     </div>
   </div>
 
-  <div class="content-grid">
-    <div class="card">
-      <h2 class="card__title">Meus Cursos</h2>
-      <div class="course-item">
-        <div class="course-icon" style="background:#5C3A1E">
-          <svg viewBox="0 0 24 24"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+  <div class="main__content">
+
+    <!-- ═══ PENDING SCREEN ═══ -->
+    <div class="page" id="pagePending">
+      <div class="pending-screen">
+        <div class="pending-screen__icon">
+          <svg viewBox="0 0 24 24"><path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
-        <div>
-          <div class="course-name">Reforco Escolar</div>
-          <div class="course-progress">75% concluido</div>
-        </div>
-        <div class="course-bar"><div class="course-bar-fill" style="width:75%"></div></div>
-      </div>
-      <div class="course-item">
-        <div class="course-icon" style="background:#3A6B1E">
-          <svg viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-        </div>
-        <div>
-          <div class="course-name">Formacao Crista</div>
-          <div class="course-progress">60% concluido</div>
-        </div>
-        <div class="course-bar"><div class="course-bar-fill" style="width:60%"></div></div>
-      </div>
-      <div class="course-item">
-        <div class="course-icon" style="background:#C59A3F">
-          <svg viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-        </div>
-        <div>
-          <div class="course-name">Capacitacao Comunitaria</div>
-          <div class="course-progress">45% concluido</div>
-        </div>
-        <div class="course-bar"><div class="course-bar-fill" style="width:45%"></div></div>
+        <h2 class="pending-screen__title">Inscricao em Analise</h2>
+        <p class="pending-screen__desc">Sua inscricao foi recebida e esta sendo analisada pela administracao do CESFA. Voce recebera acesso assim que for aprovado.</p>
+        <a href="index.html" class="btn btn--primary">Voltar ao Site</a>
       </div>
     </div>
 
-    <div class="card">
-      <h2 class="card__title">Proximos Eventos</h2>
-      <div class="event-item">
-        <div class="event-date">15 Jun 2026</div>
-        <div class="event-name">Retiro de Corpus Christi</div>
-        <div class="event-location">CESFA — Caxias, MA</div>
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="page" id="pageDashboard">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat__icon" style="background:var(--primary)"><svg viewBox="0 0 24 24"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></div>
+          <div class="stat__label">Cursos Inscritos</div>
+          <div class="stat__value" id="statCursos">0</div>
+          <div class="stat__bar"><div class="stat__bar-fill" style="width:0%;background:var(--primary)" id="barCursos"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat__icon" style="background:var(--accent)"><svg viewBox="0 0 24 24"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></div>
+          <div class="stat__label">Progresso Geral</div>
+          <div class="stat__value" id="statProgresso">0%</div>
+          <div class="stat__bar"><div class="stat__bar-fill" style="width:0%;background:var(--accent)" id="barProgresso"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat__icon" style="background:var(--green)"><svg viewBox="0 0 24 24"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg></div>
+          <div class="stat__label">Materiais</div>
+          <div class="stat__value">12</div>
+          <div class="stat__bar"><div class="stat__bar-fill" style="width:40%;background:var(--green)"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat__icon" style="background:#7B1FA2"><svg viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg></div>
+          <div class="stat__label">Proximos Eventos</div>
+          <div class="stat__value">3</div>
+          <div class="stat__bar"><div class="stat__bar-fill" style="width:55%;background:#7B1FA2"></div></div>
+        </div>
       </div>
-      <div class="event-item">
-        <div class="event-date">20 Jul 2026</div>
-        <div class="event-name">Encontro de Jovens</div>
-        <div class="event-location">Auditorio CESFA</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card__header"><h2 class="card__title">Meus Cursos</h2></div>
+          <div class="card__body" id="dashCourses"><p style="color:var(--text-muted);font-size:.88rem">Nenhum curso inscrito ainda.</p></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2 class="card__title">Proximos Eventos</h2></div>
+          <div class="card__body">
+            <div class="evt"><div class="evt__date">15 Jun 2026</div><div class="evt__name">Retiro de Corpus Christi</div><div class="evt__loc">CESFA — Caxias, MA</div></div>
+            <div class="evt"><div class="evt__date">20 Jul 2026</div><div class="evt__name">Encontro de Jovens</div><div class="evt__loc">Auditorio CESFA</div></div>
+            <div class="evt"><div class="evt__date">09 Ago 2026</div><div class="evt__name">Aniversario CESFA — 18 Anos</div><div class="evt__loc">CESFA — Caxias, MA</div></div>
+          </div>
+        </div>
       </div>
-      <div class="event-item">
-        <div class="event-date">09 Ago 2026</div>
-        <div class="event-name">Aniversario CESFA — 18 Anos</div>
-        <div class="event-location">CESFA — Caxias, MA</div>
+    </div>
+
+    <!-- ═══ CURSOS PAGE ═══ -->
+    <div class="page" id="pageCursos">
+      <div class="courses-grid">
+        <div class="course-card">
+          <div class="course-card__img" style="background:linear-gradient(135deg,#5C3A1E,#7A5230)">
+            <span class="course-card__badge" style="background:var(--green)">Aberto</span>
+          </div>
+          <div class="course-card__body">
+            <h3 class="course-card__title">Reforco Escolar</h3>
+            <p class="course-card__desc">Apoio pedagogico para criancas e adolescentes com foco em matematica, portugues e ciencias.</p>
+            <div class="course-card__footer">
+              <button class="btn btn--primary btn--sm" onclick="openCourseDetail('reforco')">Saiba Mais</button>
+            </div>
+          </div>
+        </div>
+        <div class="course-card">
+          <div class="course-card__img" style="background:linear-gradient(135deg,#3A6B1E,#2D5016)">
+            <span class="course-card__badge" style="background:var(--green)">Aberto</span>
+          </div>
+          <div class="course-card__body">
+            <h3 class="course-card__title">Formacao Crista</h3>
+            <p class="course-card__desc">Catequese e formacao na fe para jovens e adultos da comunidade.</p>
+            <div class="course-card__footer">
+              <button class="btn btn--primary btn--sm" onclick="openCourseDetail('formacao')">Saiba Mais</button>
+            </div>
+          </div>
+        </div>
+        <div class="course-card">
+          <div class="course-card__img" style="background:linear-gradient(135deg,#C59A3F,#A0632E)">
+            <span class="course-card__badge" style="background:var(--accent)">Novo</span>
+          </div>
+          <div class="course-card__body">
+            <h3 class="course-card__title">Capacitacao Comunitaria</h3>
+            <p class="course-card__desc">Programas de autonomia e capacitacao profissional para mulheres e jovens.</p>
+            <div class="course-card__footer">
+              <button class="btn btn--primary btn--sm" onclick="openCourseDetail('capacitacao')">Saiba Mais</button>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- ═══ MATERIAIS PAGE ═══ -->
+    <div class="page" id="pageMateriais">
+      <div class="card"><div class="card__header"><h2 class="card__title">Materiais Didaticos</h2></div><div class="card__body"><p style="color:var(--text-muted)">Os materiais serao disponibilizados pelos professores em breve.</p></div></div>
+    </div>
+
+    <!-- ═══ CALENDARIO PAGE ═══ -->
+    <div class="page" id="pageCalendario">
+      <div class="card"><div class="card__header"><h2 class="card__title">Calendario Academico</h2></div><div class="card__body">
+        <div class="evt"><div class="evt__date">15 Jun 2026</div><div class="evt__name">Retiro de Corpus Christi</div><div class="evt__loc">CESFA — Caxias, MA</div></div>
+        <div class="evt"><div class="evt__date">20 Jul 2026</div><div class="evt__name">Encontro de Jovens Sao Francisco</div><div class="evt__loc">Auditorio CESFA</div></div>
+        <div class="evt"><div class="evt__date">09 Ago 2026</div><div class="evt__name">Aniversario CESFA — 18 Anos</div><div class="evt__loc">CESFA — Caxias, MA</div></div>
+        <div class="evt"><div class="evt__date">04 Out 2026</div><div class="evt__name">Dia de Sao Francisco de Assis</div><div class="evt__loc">CESFA — Caxias, MA</div></div>
+      </div></div>
+    </div>
+
+    <!-- ═══ ADMIN PAGE ═══ -->
+    <div class="page" id="pageAdmin">
+      <div class="card">
+        <div class="card__header"><h2 class="card__title">Inscricoes Pendentes</h2></div>
+        <div class="card__body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nome</th><th>Email</th><th>Curso</th><th>Data</th><th>Status</th><th>Acoes</th></tr></thead>
+              <tbody id="enrollmentTable"><tr><td colspan="6" style="text-align:center;color:var(--text-muted)">Carregando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ═══ COURSE DETAIL MODAL ═══ -->
+<div class="modal" id="courseModal">
+  <div class="modal__card">
+    <div class="modal__header">
+      <h2 class="modal__title" id="modalCourseTitle"></h2>
+      <button class="modal__close" onclick="closeModal('courseModal')">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <p class="modal__desc" id="modalCourseDesc"></p>
+      <div class="modal__details" id="modalCourseDetails"></div>
+      <button class="btn btn--accent" onclick="openEnrollForm()" id="modalEnrollBtn">Inscrever-se neste curso</button>
     </div>
   </div>
-</main>
+</div>
 
+<!-- ═══ ENROLLMENT FORM MODAL ═══ -->
+<div class="modal" id="enrollModal">
+  <div class="modal__card">
+    <div class="modal__header">
+      <h2 class="modal__title">Formulario de Inscricao</h2>
+      <button class="modal__close" onclick="closeModal('enrollModal')">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <p class="modal__desc">Preencha as informacoes abaixo. Sua inscricao sera analisada pela administracao do CESFA.</p>
+      <div class="form__group"><label class="form__label">Nome Completo</label><input type="text" class="form__input" id="enrollName" placeholder="Seu nome completo"></div>
+      <div class="form__row">
+        <div class="form__group"><label class="form__label">Idade</label><input type="number" class="form__input" id="enrollAge" placeholder="Ex: 15"></div>
+        <div class="form__group"><label class="form__label">Telefone</label><input type="tel" class="form__input" id="enrollPhone" placeholder="(99) 99999-9999"></div>
+      </div>
+      <div class="form__group"><label class="form__label">Endereco / Bairro</label><input type="text" class="form__input" id="enrollAddress" placeholder="Seu bairro ou endereco"></div>
+      <div class="form__group"><label class="form__label">Curso Desejado</label><input type="text" class="form__input" id="enrollCourse" readonly></div>
+      <div class="form__group"><label class="form__label">Por que voce quer participar?</label><textarea class="form__textarea" id="enrollReason" placeholder="Conte um pouco sobre voce e por que deseja se inscrever..."></textarea></div>
+      <button class="btn btn--accent" onclick="submitEnrollment()" id="submitEnrollBtn">Enviar Inscricao</button>
+    </div>
+  </div>
 </div>
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
+// ═══ FIREBASE INIT ═══
 const firebaseConfig = {
   apiKey: "AIzaSyBfIbx48JjQ0SbETDp4a-wwR9_lBAbhX70",
   authDomain: "cefas-website.firebaseapp.com",
@@ -248,29 +467,392 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
 
-// Check if logged in
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('portalContent').style.display = 'flex';
-    document.getElementById('greetingName').textContent = user.displayName || user.email.split('@')[0];
-    document.getElementById('userName').textContent = user.displayName || 'Usuario';
-    document.getElementById('userEmail').textContent = user.email;
-    document.getElementById('userAvatar').textContent = (user.displayName || user.email)[0].toUpperCase();
+// ═══ COURSES DATA ═══
+const coursesData = {
+  reforco: {
+    title: 'Reforco Escolar',
+    desc: 'O programa de Reforco Escolar do CESFA oferece apoio pedagogico completo para criancas e adolescentes dos bairros Seriema, Sao Francisco, Teso Duro e Bacuri. As aulas acontecem no contraturno escolar e cobrem as disciplinas de Matematica, Portugues, Ciencias e Historia.\n\nOs educadores do CESFA trabalham com metodologias ativas, respeitando o ritmo de cada estudante e promovendo a autonomia no aprendizado. Alem do conteudo academico, o programa integra valores franciscanos como solidariedade, simplicidade e respeito ao proximo.',
+    details: [
+      {label: 'Duracao', value: '6 meses'},
+      {label: 'Horario', value: 'Seg a Sex, 14h-17h'},
+      {label: 'Vagas', value: '30 alunos'},
+      {label: 'Faixa Etaria', value: '8 a 16 anos'},
+    ]
+  },
+  formacao: {
+    title: 'Formacao Crista',
+    desc: 'A Formacao Crista do CESFA prepara jovens e adultos para uma vivencia mais profunda da fe catolica, enraizada no Carisma Franciscano. O programa inclui catequese, estudos biblicos, retiros espirituais e encontros comunitarios.\n\nOs participantes aprendem sobre a vida de Sao Francisco de Assis, os sacramentos, a doutrina social da Igreja e como aplicar esses ensinamentos no dia a dia. A formacao e ecumenica e acolhedora, aberta a todos que buscam crescimento espiritual.',
+    details: [
+      {label: 'Duracao', value: '1 ano'},
+      {label: 'Horario', value: 'Sabados, 9h-12h'},
+      {label: 'Vagas', value: '40 participantes'},
+      {label: 'Faixa Etaria', value: '12 anos em diante'},
+    ]
+  },
+  capacitacao: {
+    title: 'Capacitacao Comunitaria',
+    desc: 'O programa de Capacitacao Comunitaria do CESFA e voltado para mulheres e jovens da comunidade que buscam autonomia e desenvolvimento profissional. Os cursos incluem artesanato, culinaria, informatica basica e empreendedorismo.\n\nO objetivo e fortalecer os vinculos familiares e comunitarios, oferecendo ferramentas praticas para geracao de renda e independencia. As turmas sao acompanhadas por profissionais qualificados e voluntarios comprometidos com a transformacao social.',
+    details: [
+      {label: 'Duracao', value: '4 meses'},
+      {label: 'Horario', value: 'Ter e Qui, 14h-17h'},
+      {label: 'Vagas', value: '25 participantes'},
+      {label: 'Faixa Etaria', value: '16 anos em diante'},
+    ]
+  }
+};
 
-    const now = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('currentDate').textContent = now.toLocaleDateString('pt-BR', options);
+let currentUser = null;
+let currentUserData = null;
+let selectedCourse = null;
+
+// Admin emails
+const ADMIN_EMAILS = ['redzenzag@gmail.com'];
+
+// ═══ AUTH STATE ═══
+auth.onAuthStateChanged(async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  currentUser = user;
+
+  // Set date
+  const now = new Date();
+  document.getElementById('currentDate').textContent = now.toLocaleDateString('pt-BR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  // Set user info
+  const displayName = user.displayName || user.email.split('@')[0];
+  document.getElementById('greetingName').textContent = displayName.split(' ')[0];
+  document.getElementById('userName').textContent = displayName;
+  document.getElementById('userEmail').textContent = user.email;
+  document.getElementById('userAvatar').textContent = displayName[0].toUpperCase();
+
+  // Check if admin
+  const isAdmin = ADMIN_EMAILS.includes(user.email);
+
+  // Get user doc from Firestore
+  try {
+    const userDoc = await db.collection('usuarios').doc(user.uid).get();
+    if (userDoc.exists) {
+      currentUserData = userDoc.data();
+    } else {
+      currentUserData = { tipo: 'visitante', status: 'novo' };
+      await db.collection('usuarios').doc(user.uid).set({
+        nome: displayName,
+        email: user.email,
+        foto: user.photoURL || '',
+        tipo: isAdmin ? 'admin' : 'visitante',
+        status: 'novo',
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      if (isAdmin) currentUserData.tipo = 'admin';
+    }
+  } catch(e) {
+    currentUserData = { tipo: 'visitante' };
+  }
+
+  // Force admin
+  if (isAdmin) {
+    currentUserData.tipo = 'admin';
+    currentUserData.status = 'aprovado';
+    await db.collection('usuarios').doc(user.uid).update({ tipo: 'admin', status: 'aprovado' }).catch(()=>{});
+  }
+
+  // Set role display
+  const roleEl = document.getElementById('userRole');
+  if (currentUserData.tipo === 'admin') {
+    roleEl.textContent = 'Administrador';
+    roleEl.className = 'sidebar__urole sidebar__urole--admin';
+  } else if (currentUserData.status === 'aprovado') {
+    roleEl.textContent = 'Aluno';
+    roleEl.className = 'sidebar__urole sidebar__urole--aluno';
+  } else if (currentUserData.status === 'pendente') {
+    roleEl.textContent = 'Pendente';
+    roleEl.className = 'sidebar__urole sidebar__urole--pendente';
   } else {
-    window.location.href = 'index.html';
+    roleEl.textContent = 'Visitante';
+    roleEl.className = 'sidebar__urole sidebar__urole--pendente';
+  }
+
+  // Show admin panel
+  if (isAdmin) {
+    document.getElementById('adminSection').style.display = '';
+    document.getElementById('adminLink').style.display = '';
+    loadEnrollments();
+  }
+
+  // Show app
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+
+  // Load user courses
+  loadUserCourses();
+
+  // Route
+  if (currentUserData.status === 'pendente' && currentUserData.tipo !== 'admin') {
+    showPage('pending');
+  } else {
+    showPage('dashboard');
   }
 });
 
-function logout() {
-  auth.signOut().then(() => {
-    window.location.href = 'index.html';
+// ═══ PAGE NAVIGATION ═══
+function showPage(page, linkEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar__link').forEach(l => l.classList.remove('active'));
+
+  if (page === 'pending') {
+    document.getElementById('pagePending').classList.add('active');
+  } else if (page === 'dashboard') {
+    document.getElementById('pageDashboard').classList.add('active');
+  } else if (page === 'cursos') {
+    document.getElementById('pageCursos').classList.add('active');
+  } else if (page === 'materiais') {
+    document.getElementById('pageMateriais').classList.add('active');
+  } else if (page === 'calendario') {
+    document.getElementById('pageCalendario').classList.add('active');
+  } else if (page === 'admin') {
+    document.getElementById('pageAdmin').classList.add('active');
+    loadEnrollments();
+  }
+
+  if (linkEl) linkEl.classList.add('active');
+
+  // Close mobile sidebar
+  document.querySelector('.sidebar').classList.remove('open');
+}
+
+// ═══ COURSE DETAIL ═══
+function openCourseDetail(courseId) {
+  selectedCourse = courseId;
+  const c = coursesData[courseId];
+  document.getElementById('modalCourseTitle').textContent = c.title;
+  document.getElementById('modalCourseDesc').textContent = c.desc;
+
+  let detailsHTML = '';
+  c.details.forEach(d => {
+    detailsHTML += '<div class="modal__detail"><div class="modal__detail-label">' + d.label + '</div><div class="modal__detail-value">' + d.value + '</div></div>';
   });
+  document.getElementById('modalCourseDetails').innerHTML = detailsHTML;
+
+  document.getElementById('courseModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function openEnrollForm() {
+  closeModal('courseModal');
+  const c = coursesData[selectedCourse];
+  document.getElementById('enrollCourse').value = c.title;
+  if (currentUser) {
+    document.getElementById('enrollName').value = currentUser.displayName || '';
+  }
+  document.getElementById('enrollModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal('courseModal'); closeModal('enrollModal'); }
+});
+
+// ═══ SUBMIT ENROLLMENT ═══
+async function submitEnrollment() {
+  const name = document.getElementById('enrollName').value.trim();
+  const age = document.getElementById('enrollAge').value.trim();
+  const phone = document.getElementById('enrollPhone').value.trim();
+  const address = document.getElementById('enrollAddress').value.trim();
+  const course = document.getElementById('enrollCourse').value;
+  const reason = document.getElementById('enrollReason').value.trim();
+
+  if (!name || !age || !phone || !address) {
+    alert('Preencha todos os campos obrigatorios!');
+    return;
+  }
+
+  const btn = document.getElementById('submitEnrollBtn');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+
+  try {
+    await db.collection('inscricoes').add({
+      userId: currentUser.uid,
+      nome: name,
+      email: currentUser.email,
+      idade: age,
+      telefone: phone,
+      endereco: address,
+      curso: course,
+      courseId: selectedCourse,
+      motivo: reason,
+      status: 'pendente',
+      criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    await db.collection('usuarios').doc(currentUser.uid).update({
+      status: 'pendente',
+      nome: name
+    });
+
+    currentUserData.status = 'pendente';
+    alert('Inscricao enviada com sucesso! Aguarde a aprovacao da administracao.');
+    closeModal('enrollModal');
+
+    // Update role display
+    const roleEl = document.getElementById('userRole');
+    roleEl.textContent = 'Pendente';
+    roleEl.className = 'sidebar__urole sidebar__urole--pendente';
+
+  } catch(error) {
+    alert('Erro ao enviar inscricao: ' + error.message);
+  }
+
+  btn.textContent = 'Enviar Inscricao';
+  btn.disabled = false;
+}
+
+// ═══ LOAD ENROLLMENTS (ADMIN) ═══
+async function loadEnrollments() {
+  try {
+    const snap = await db.collection('inscricoes').orderBy('criadoEm', 'desc').get();
+    const tbody = document.getElementById('enrollmentTable');
+
+    if (snap.empty) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">Nenhuma inscricao encontrada.</td></tr>';
+      document.getElementById('pendingBadge').style.display = 'none';
+      return;
+    }
+
+    let html = '';
+    let pendingCount = 0;
+
+    snap.forEach(doc => {
+      const d = doc.data();
+      const date = d.criadoEm ? d.criadoEm.toDate().toLocaleDateString('pt-BR') : '-';
+      let statusClass = 'pending';
+      let statusText = 'Pendente';
+      if (d.status === 'aprovado') { statusClass = 'approved'; statusText = 'Aprovado'; }
+      if (d.status === 'rejeitado') { statusClass = 'rejected'; statusText = 'Rejeitado'; }
+      if (d.status === 'pendente') pendingCount++;
+
+      let actions = '';
+      if (d.status === 'pendente') {
+        actions = '<div class="action-btns"><button class="btn btn--green btn--sm" onclick="approveEnrollment(\'' + doc.id + '\',\'' + d.userId + '\',\'' + d.courseId + '\')">Aprovar</button><button class="btn btn--red btn--sm" onclick="rejectEnrollment(\'' + doc.id + '\',\'' + d.userId + '\')">Rejeitar</button></div>';
+      } else {
+        actions = '<span style="color:var(--text-muted);font-size:.78rem">-</span>';
+      }
+
+      html += '<tr><td><strong>' + d.nome + '</strong></td><td>' + d.email + '</td><td>' + d.curso + '</td><td>' + date + '</td><td><span class="status-badge status-badge--' + statusClass + '">' + statusText + '</span></td><td>' + actions + '</td></tr>';
+    });
+
+    tbody.innerHTML = html;
+
+    // Update badge
+    const badge = document.getElementById('pendingBadge');
+    if (pendingCount > 0) {
+      badge.style.display = '';
+      badge.textContent = pendingCount;
+    } else {
+      badge.style.display = 'none';
+    }
+
+  } catch(error) {
+    console.error('Erro ao carregar inscricoes:', error);
+  }
+}
+
+// ═══ APPROVE / REJECT ═══
+async function approveEnrollment(enrollId, userId, courseId) {
+  try {
+    await db.collection('inscricoes').doc(enrollId).update({ status: 'aprovado' });
+    await db.collection('usuarios').doc(userId).update({
+      tipo: 'aluno',
+      status: 'aprovado'
+    });
+
+    // Add course to user
+    await db.collection('usuarios').doc(userId).collection('cursos').doc(courseId).set({
+      courseId: courseId,
+      progresso: 0,
+      inscritoEm: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert('Inscricao aprovada!');
+    loadEnrollments();
+  } catch(error) {
+    alert('Erro: ' + error.message);
+  }
+}
+
+async function rejectEnrollment(enrollId, userId) {
+  try {
+    await db.collection('inscricoes').doc(enrollId).update({ status: 'rejeitado' });
+    await db.collection('usuarios').doc(userId).update({ status: 'rejeitado' });
+    alert('Inscricao rejeitada.');
+    loadEnrollments();
+  } catch(error) {
+    alert('Erro: ' + error.message);
+  }
+}
+
+// ═══ LOAD USER COURSES ═══
+async function loadUserCourses() {
+  try {
+    const snap = await db.collection('usuarios').doc(currentUser.uid).collection('cursos').get();
+    const container = document.getElementById('dashCourses');
+    const colors = { reforco: '#5C3A1E', formacao: '#3A6B1E', capacitacao: '#C59A3F' };
+    const icons = {
+      reforco: '<path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
+      formacao: '<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>',
+      capacitacao: '<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>'
+    };
+
+    if (snap.empty) {
+      document.getElementById('statCursos').textContent = '0';
+      document.getElementById('statProgresso').textContent = '0%';
+      return;
+    }
+
+    let html = '';
+    let totalProgress = 0;
+    let count = 0;
+
+    snap.forEach(doc => {
+      const d = doc.data();
+      const cid = d.courseId || doc.id;
+      const cdata = coursesData[cid];
+      if (!cdata) return;
+
+      const prog = d.progresso || 0;
+      totalProgress += prog;
+      count++;
+
+      html += '<div class="course"><div class="course__icon" style="background:' + (colors[cid]||'var(--primary)') + '"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">' + (icons[cid]||'') + '</svg></div><div class="course__info"><div class="course__name">' + cdata.title + '</div><div class="course__meta">' + prog + '% concluido</div></div><div class="course__bar"><div class="course__bar-fill" style="width:' + prog + '%;background:' + (colors[cid]||'var(--accent)') + '"></div></div><div class="course__pct">' + prog + '%</div></div>';
+    });
+
+    container.innerHTML = html;
+
+    // Update stats
+    const avg = count > 0 ? Math.round(totalProgress / count) : 0;
+    document.getElementById('statCursos').textContent = count;
+    document.getElementById('statProgresso').textContent = avg + '%';
+    document.getElementById('barCursos').style.width = (count * 33) + '%';
+    document.getElementById('barProgresso').style.width = avg + '%';
+
+  } catch(error) {
+    console.error('Erro ao carregar cursos:', error);
+  }
+}
+
+// ═══ LOGOUT ═══
+function doLogout() {
+  auth.signOut().then(() => { window.location.href = 'index.html'; });
 }
 </script>
 </body>
