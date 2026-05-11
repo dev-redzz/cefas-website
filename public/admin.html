@@ -217,6 +217,7 @@ input,select,textarea{font-family:var(--fb);font-size:.88rem}
 <button class="btn btn-g" onclick="addEvento()">Criar Evento</button>
 </div></div></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -224,6 +225,21 @@ input,select,textarea{font-family:var(--fb);font-size:.88rem}
 firebase.initializeApp({apiKey:"AIzaSyBfIbx48JjQ0SbETDp4a-wwR9_lBAbhX70",authDomain:"cefas-website.firebaseapp.com",projectId:"cefas-website",storageBucket:"cefas-website.firebasestorage.app",messagingSenderId:"474668252634",appId:"1:474668252634:web:be627269a5a00de78294e3"});
 const auth=firebase.auth(),db=firebase.firestore();
 const ADMIN='redzenzag@gmail.com';
+emailjs.init('6wK14YCRmRgwcaIKn');
+
+async function sendEmail(toEmail,toName,curso,statusTexto,mensagem){
+  try{
+    await emailjs.send('service_daeqwtz','template_hy7npca',{
+      to_email:toEmail,
+      to_name:toName,
+      name:'Secretaria CESFA',
+      curso:curso,
+      status_texto:statusTexto,
+      mensagem:mensagem
+    });
+    console.log('Email enviado para '+toEmail);
+  }catch(e){console.error('Erro ao enviar email:',e)}
+}
 
 auth.onAuthStateChanged(u=>{
   if(!u){window.location.href='index.html';return}
@@ -294,15 +310,33 @@ async function loadInscricoes(){
 }
 
 async function approveInsc(id,uid,cid){
+  const inscDoc=await db.collection('inscricoes').doc(id).get();
+  const insc=inscDoc.data();
   await db.collection('inscricoes').doc(id).update({status:'aprovado'});
   await db.collection('usuarios').doc(uid).update({tipo:'aluno',status:'aprovado'});
   if(cid)await db.collection('usuarios').doc(uid).collection('cursos').doc(cid).set({courseId:cid,progresso:0,inscritoEm:firebase.firestore.FieldValue.serverTimestamp()});
-  alert('Aprovado!');loadInscricoes();loadDashStats();loadAlunos();
+  await sendEmail(
+    insc.email,
+    insc.nome,
+    insc.curso,
+    'APROVADA',
+    'Parabens! Sua inscricao no curso "'+insc.curso+'" foi aprovada pela secretaria do CESFA.\n\nVoce ja pode acessar o Portal do Aluno fazendo login no site com seu email Google.\n\nAcesse: https://cesfa-website.web.app'
+  );
+  alert('Aprovado! Email de confirmacao enviado para '+insc.email);loadInscricoes();loadDashStats();loadAlunos();
 }
 async function rejectInsc(id,uid){
+  const inscDoc=await db.collection('inscricoes').doc(id).get();
+  const insc=inscDoc.data();
   await db.collection('inscricoes').doc(id).update({status:'rejeitado'});
   await db.collection('usuarios').doc(uid).update({status:'rejeitado'});
-  alert('Rejeitado.');loadInscricoes();loadDashStats();
+  await sendEmail(
+    insc.email,
+    insc.nome,
+    insc.curso,
+    'NAO APROVADA',
+    'Infelizmente sua inscricao no curso "'+insc.curso+'" nao foi aprovada neste momento.\n\nPara mais informacoes, entre em contato com a secretaria do CESFA.\n\nAtenciosamente,\nSecretaria CESFA'
+  );
+  alert('Rejeitado. Email enviado para '+insc.email);loadInscricoes();loadDashStats();
 }
 
 async function loadAlunos(){

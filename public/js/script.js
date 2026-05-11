@@ -14,6 +14,7 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const ADMIN_EMAIL = 'redzenzag@gmail.com';
+emailjs.init('6wK14YCRmRgwcaIKn');
 
 // ============================================
 // SYNC USER: quando login acontece, verifica se o admin
@@ -298,6 +299,17 @@ async function submitInscricao() {
     }, { merge: true });
 
     alert('Inscricao enviada com sucesso! Aguarde a aprovacao da secretaria do CESFA.');
+    // Send confirmation email
+    try{
+      await emailjs.send('service_daeqwtz','template_hy7npca',{
+        to_email:email,
+        to_name:nome,
+        name:'Secretaria CESFA',
+        curso:curso,
+        status_texto:'RECEBIDA',
+        mensagem:'Sua inscricao no curso "'+curso+'" foi recebida com sucesso!\n\nSua solicitacao sera analisada pela secretaria do CESFA. Voce recebera outro email quando sua inscricao for aprovada.\n\nObrigado pelo interesse!'
+      });
+    }catch(e){console.error('Erro email:',e)}
     closeInscricaoModal();
     document.getElementById('inscNome').value = '';
     document.getElementById('inscEmail').value = '';
