@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal do Professor — CESFA</title>
+<link rel="icon" type="image/png" href="img/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--p:#5C3A1E;--pd:#3B2310;--pp:#2A1809;--a:#C59A3F;--al:#D4AC5A;--cr:#FDF8F0;--cd:#F5ECE0;--ce:#EDE0CE;--w:#FFF;--t:#1A0F0A;--ts:#5A4535;--tm:#8A7565;--g:#2D7D3A;--gl:#E8F5E9;--b:#1565C0;--bl:#E3F2FD;--r:#C62828;--rl:#FFEBEE;--sh:0 2px 8px rgba(60,35,16,.06);--shm:0 4px 20px rgba(60,35,16,.1);--rd:12px;--tr:all .25s ease;--fh:'Montserrat',sans-serif;--fb:'Lora',serif}
+html{font-size:16px}body{font-family:var(--fb);color:var(--t);background:#F7F3EE;min-height:100vh;display:flex}
+a{text-decoration:none;color:inherit}button{cursor:pointer;border:none;background:none;font-family:inherit}img{max-width:100%;display:block}
+input,select,textarea{font-family:var(--fb);font-size:.88rem}
+
+.loading{position:fixed;inset:0;background:var(--cr);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
+.loading img{width:80px;border-radius:50%;margin-bottom:20px;animation:pulse 1.5s ease infinite}
+.loading span{font-family:var(--fh);font-size:.85rem;color:var(--tm)}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:.7}}
+
+.noauth{display:none;position:fixed;inset:0;background:var(--cr);flex-direction:column;align-items:center;justify-content:center;z-index:9998;text-align:center;padding:40px}
+.noauth h2{font-family:var(--fh);color:var(--r);margin-bottom:12px}
+.noauth p{color:var(--tm);margin-bottom:24px;max-width:400px;line-height:1.6}
+.noauth a{padding:10px 28px;background:var(--p);color:var(--w);border-radius:8px;font-family:var(--fh);font-size:.8rem;font-weight:700;text-transform:uppercase}
+
+.app{display:flex;min-height:100vh;width:100%}
+
+/* SIDEBAR */
+.sb{width:250px;background:var(--pp);color:var(--w);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sb-hd{padding:18px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-hd img{width:38px;height:38px;border-radius:50%}
+.sb-hd div{font-family:var(--fh);font-weight:800;font-size:.85rem}
+.sb-hd small{display:block;font-size:.55rem;font-weight:600;color:#81C784;margin-top:1px;text-transform:uppercase;letter-spacing:.08em}
+.sb-nav{flex:1;padding:12px 8px;display:flex;flex-direction:column;gap:1px}
+.sb-sec{padding:6px 14px;font-family:var(--fh);font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.18);margin-top:6px}
+.sb-lk{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-family:var(--fh);font-size:.75rem;font-weight:600;color:rgba(255,255,255,.4);transition:var(--tr)}
+.sb-lk:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.7)}
+.sb-lk.act{background:rgba(129,199,132,.1);color:#81C784}
+.sb-lk svg{width:18px;height:18px;flex-shrink:0;stroke-width:1.5;fill:none}
+.sb-ft{padding:12px;border-top:1px solid rgba(255,255,255,.06)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.sb-av{width:34px;height:34px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:.8rem;color:var(--w)}
+.sb-un{font-family:var(--fh);font-size:.78rem;font-weight:700;color:var(--w)}
+.sb-ue{font-size:.65rem;color:rgba(255,255,255,.35)}
+.sb-disc{font-size:.6rem;color:#81C784;margin-top:1px}
+.sb-ft button{width:100%;margin-top:6px;padding:10px 14px;border-radius:8px;font-family:var(--fh);font-size:.7rem;font-weight:700;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:8px;transition:var(--tr);text-transform:uppercase}
+.sb-ft button:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.6)}
+.sb-ft svg{width:16px;height:16px}
+
+/* MAIN */
+.mn{flex:1;margin-left:250px}
+.tp{background:var(--w);border-bottom:1px solid rgba(0,0,0,.04);padding:16px 36px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+.tp h1{font-family:var(--fh);font-size:1.2rem;font-weight:900;color:var(--pd)}.tp h1 span{color:var(--g)}
+.tp-date{font-size:.75rem;color:var(--tm);font-family:var(--fh);margin-top:2px}
+.tp-btn{padding:8px 20px;border-radius:8px;font-family:var(--fh);font-size:.72rem;font-weight:700;text-transform:uppercase;border:1.5px solid var(--ce);color:var(--tm);transition:var(--tr)}
+.tp-btn:hover{border-color:var(--p);color:var(--p)}
+
+.mc{padding:28px 36px;max-width:1200px}
+.pg{display:none}.pg.act{display:block}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.st{background:var(--w);border-radius:var(--rd);padding:20px;box-shadow:var(--sh);transition:var(--tr)}
+.st:hover{transform:translateY(-2px);box-shadow:var(--shm)}
+.st-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.st-ic svg{width:18px;height:18px;stroke:var(--w);fill:none;stroke-width:1.5}
+.st-lb{font-family:var(--fh);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tm);margin-bottom:4px}
+.st-vl{font-family:var(--fh);font-size:1.6rem;font-weight:900;color:var(--pd)}
+
+/* CARDS */
+.cd{background:var(--w);border-radius:var(--rd);box-shadow:var(--sh);overflow:hidden;margin-bottom:20px}
+.cd-h{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--cd)}
+.cd-t{font-family:var(--fh);font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--pd)}
+.cd-b{padding:22px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-family:var(--fh);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tm);padding:10px 14px;text-align:left;border-bottom:2px solid var(--cd);background:var(--cr)}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--cd);font-size:.82rem;color:var(--ts)}
+.tbl tr:hover td{background:var(--cr)}
+.badge{padding:3px 10px;border-radius:16px;font-family:var(--fh);font-size:.6rem;font-weight:700;text-transform:uppercase;display:inline-block}
+.badge-g{background:var(--gl);color:var(--g)}.badge-b{background:var(--bl);color:var(--b)}
+
+/* BUTTONS */
+.btn{padding:8px 20px;border-radius:8px;font-family:var(--fh);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:var(--tr);display:inline-flex;align-items:center;gap:6px}
+.btn-p{background:var(--p);color:var(--w)}.btn-p:hover{background:var(--pd)}
+.btn-a{background:var(--a);color:var(--pd)}.btn-a:hover{background:var(--al)}
+.btn-g{background:var(--g);color:var(--w)}.btn-g:hover{background:#256829}
+.btn-s{padding:6px 14px;font-size:.65rem}
+
+/* FORMS */
+.fg{margin-bottom:14px}
+.fl{display:block;font-family:var(--fh);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ts);margin-bottom:4px}
+.fi,.fs,.ft{width:100%;padding:10px 13px;border:1.5px solid var(--ce);border-radius:8px;font-size:.85rem;transition:var(--tr);background:var(--cr)}
+.fi:focus,.fs:focus,.ft:focus{outline:none;border-color:var(--p);background:var(--w)}
+.ft{min-height:70px;resize:vertical}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(42,24,9,.55);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px}
+.modal.act{display:flex}
+.modal-c{background:var(--w);border-radius:var(--rd);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.modal-h{padding:22px 26px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.modal-t{font-family:var(--fh);font-size:1rem;font-weight:900;color:var(--pd);text-transform:uppercase}
+.modal-x{width:34px;height:34px;border-radius:50%;background:var(--cr);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--tm);transition:var(--tr);flex-shrink:0}
+.modal-x:hover{background:var(--ce)}
+.modal-b{padding:18px 26px 26px}
+
+/* ALUNO ITEM */
+.ai{display:flex;align-items:center;gap:14px;padding:14px;border:1.5px solid var(--cd);border-radius:10px;margin-bottom:10px;transition:var(--tr)}
+.ai:hover{border-color:var(--p);background:var(--cr)}
+.ai-av{width:38px;height:38px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:.8rem;color:var(--pd);flex-shrink:0}
+.ai-nm{font-family:var(--fh);font-size:.8rem;font-weight:700;color:var(--pd)}
+.ai-em{font-size:.72rem;color:var(--tm)}
+.ai-act{margin-left:auto}
+
+.empty{text-align:center;padding:40px;color:var(--tm);font-size:.9rem}
+
+@media(max-width:768px){.sb{display:none}.mn{margin-left:0}.mc{padding:20px}.stats{grid-template-columns:1fr}.fr{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading"><img src="img/logo.png" alt=""><span>Carregando portal...</span></div>
+<div class="noauth" id="noauth"><h2>Acesso Restrito</h2><p>Voce precisa estar cadastrado como professor pela secretaria do CESFA para acessar este portal. Entre em contato com a administracao.</p><a href="index.html">Voltar ao Site</a></div>
+
+<div class="app" id="app" style="display:none">
+<aside class="sb">
+  <div class="sb-hd"><img src="img/logo.png" alt=""><div>CESFA<small>Portal do Professor</small></div></div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Painel</div>
+    <a href="#" class="sb-lk act" onclick="pg('dash',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z"/></svg>Dashboard</a>
+    <div class="sb-sec">Academico</div>
+    <a href="#" class="sb-lk" onclick="pg('turmas',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>Minhas Turmas</a>
+    <a href="#" class="sb-lk" onclick="pg('notas',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>Lancar Notas</a>
+    <a href="#" class="sb-lk" onclick="pg('materiais',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>Materiais</a>
+  </nav>
+  <div class="sb-ft">
+    <div class="sb-user"><div class="sb-av" id="uAv">?</div><div><div class="sb-un" id="uNm">...</div><div class="sb-ue" id="uEm"></div><div class="sb-disc" id="uDisc"></div></div></div>
+    <button onclick="auth.signOut().then(()=>location.href='index.html')"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>Sair</button>
+  </div>
+</aside>
+
+<div class="mn">
+<div class="tp"><div><h1>Portal do <span>Professor</span></h1><p class="tp-date" id="tpDate"></p></div><a href="index.html" class="tp-btn">Voltar ao Site</a></div>
+<div class="mc">
+
+<!-- DASHBOARD -->
+<div class="pg act" id="pgDash">
+  <div class="stats">
+    <div class="st"><div class="st-ic" style="background:var(--p)"><svg viewBox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg></div><div class="st-lb">Alunos nas Turmas</div><div class="st-vl" id="stAlunos">0</div></div>
+    <div class="st"><div class="st-ic" style="background:var(--g)"><svg viewBox="0 0 24 24"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg></div><div class="st-lb">Materiais Postados</div><div class="st-vl" id="stMat">0</div></div>
+    <div class="st"><div class="st-ic" style="background:var(--a)"><svg viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg></div><div class="st-lb">Notas Lancadas</div><div class="st-vl" id="stNotas">0</div></div>
+  </div>
+  <div class="cd"><div class="cd-h"><span class="cd-t">Alunos Recentes</span></div><div class="cd-b" id="dashAlunos"><p class="empty">Carregando...</p></div></div>
+</div>
+
+<!-- TURMAS -->
+<div class="pg" id="pgTurmas">
+  <div class="cd"><div class="cd-h"><span class="cd-t">Meus Alunos</span></div><div class="cd-b" id="turmasList"><p class="empty">Carregando...</p></div></div>
+</div>
+
+<!-- LANCAR NOTAS -->
+<div class="pg" id="pgNotas">
+  <div class="cd"><div class="cd-h"><span class="cd-t">Lancar Notas</span></div><div class="cd-b">
+    <div class="fr" style="margin-bottom:16px">
+      <div class="fg"><label class="fl">Selecionar Aluno</label><select class="fs" id="notaAluno"><option value="">Selecione um aluno...</option></select></div>
+      <div class="fg"><label class="fl">Disciplina</label><input class="fi" id="notaDisc" readonly></div>
+    </div>
+    <div class="fr" style="margin-bottom:16px">
+      <div class="fg"><label class="fl">Nota (0-10)</label><input class="fi" id="notaValor" type="number" min="0" max="10" step="0.1" placeholder="Ex: 8.5"></div>
+      <div class="fg"><label class="fl">Data</label><input class="fi" id="notaData" type="date"></div>
+    </div>
+    <button class="btn btn-g" onclick="lancarNota()">Lancar Nota</button>
+    <div style="margin-top:24px"><h3 style="font-family:var(--fh);font-size:.82rem;font-weight:800;color:var(--pd);margin-bottom:14px;text-transform:uppercase;letter-spacing:.04em">Notas Lancadas</h3><table class="tbl"><thead><tr><th>Aluno</th><th>Disciplina</th><th>Nota</th><th>Data</th></tr></thead><tbody id="tblNotas"><tr><td colspan="4" class="empty">Nenhuma nota lancada.</td></tr></tbody></table></div>
+  </div></div>
+</div>
+
+<!-- MATERIAIS -->
+<div class="pg" id="pgMateriais">
+  <div class="cd"><div class="cd-h"><span class="cd-t">Postar Material</span><button class="btn btn-a btn-s" onclick="openModal('mAddMat')">+ Novo Material</button></div><div class="cd-b"><table class="tbl"><thead><tr><th>Titulo</th><th>Disciplina</th><th>Conteudo</th><th>Data</th><th>Acoes</th></tr></thead><tbody id="tblMat"><tr><td colspan="5" class="empty">Nenhum material.</td></tr></tbody></table></div></div>
+</div>
+
+</div></div></div>
+
+<!-- MODAL: Novo Material -->
+<div class="modal" id="mAddMat"><div class="modal-c"><div class="modal-h"><h2 class="modal-t">Novo Material</h2><button class="modal-x" onclick="closeModal('mAddMat')">&#x2715;</button></div><div class="modal-b">
+<div class="fg"><label class="fl">Titulo</label><input class="fi" id="matTitulo"></div>
+<div class="fg"><label class="fl">Disciplina</label><input class="fi" id="matDisc" readonly></div>
+<div class="fg"><label class="fl">Conteudo / Descricao</label><textarea class="ft" id="matConteudo" style="min-height:100px" placeholder="Descreva o material, inclua links, instrucoes..."></textarea></div>
+<button class="btn btn-g" onclick="addMaterial()">Publicar Material</button>
+</div></div></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyBfIbx48JjQ0SbETDp4a-wwR9_lBAbhX70",authDomain:"cefas-website.firebaseapp.com",projectId:"cefas-website",storageBucket:"cefas-website.firebasestorage.app",messagingSenderId:"474668252634",appId:"1:474668252634:web:be627269a5a00de78294e3"});
+const auth=firebase.auth(),db=firebase.firestore();
+let profData=null,profEmail='';
+
+auth.onAuthStateChanged(async u=>{
+  if(!u){location.href='index.html';return}
+  profEmail=u.email;
+  // Check if professor by email in professores collection
+  let found=false;
+  try{
+    const snap=await db.collection('professores').where('email','==',u.email).get();
+    if(!snap.empty){found=true;profData=snap.docs[0].data()}
+  }catch(e){console.error(e)}
+  if(!found){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('noauth').style.display='flex';
+    return;
+  }
+  const nm=profData.nome||u.displayName||u.email.split('@')[0];
+  document.getElementById('uNm').textContent=nm;
+  document.getElementById('uEm').textContent=u.email;
+  document.getElementById('uAv').textContent=nm[0].toUpperCase();
+  document.getElementById('uDisc').textContent=profData.disciplina||'';
+  document.getElementById('notaDisc').value=profData.disciplina||'';
+  document.getElementById('matDisc').value=profData.disciplina||'';
+  document.getElementById('tpDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('loading').style.display='none';
+  document.getElementById('app').style.display='flex';
+  loadAlunos();loadMateriais();loadNotasLancadas();
+});
+
+function pg(p,el){
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('act'));
+  document.querySelectorAll('.sb-lk').forEach(x=>x.classList.remove('act'));
+  const m={dash:'pgDash',turmas:'pgTurmas',notas:'pgNotas',materiais:'pgMateriais'};
+  document.getElementById(m[p]).classList.add('act');
+  if(el)el.classList.add('act');
+}
+
+function openModal(id){document.getElementById(id).classList.add('act');document.body.style.overflow='hidden'}
+function closeModal(id){document.getElementById(id).classList.remove('act');document.body.style.overflow=''}
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));
+
+async function loadAlunos(){
+  try{
+    const snap=await db.collection('usuarios').where('tipo','==','aluno').where('status','==','aprovado').get();
+    const sel=document.getElementById('notaAluno');
+    sel.innerHTML='<option value="">Selecione um aluno...</option>';
+    let h='',n=0;
+    snap.forEach(doc=>{
+      const d=doc.data();n++;
+      sel.innerHTML+='<option value="'+doc.id+'">'+d.nome+' ('+d.email+')</option>';
+      h+='<div class="ai"><div class="ai-av">'+((d.nome||'?')[0].toUpperCase())+'</div><div><div class="ai-nm">'+(d.nome||'-')+'</div><div class="ai-em">'+d.email+'</div></div></div>';
+    });
+    document.getElementById('turmasList').innerHTML=h||'<p class="empty">Nenhum aluno na turma.</p>';
+    document.getElementById('dashAlunos').innerHTML=h||'<p class="empty">Nenhum aluno.</p>';
+    document.getElementById('stAlunos').textContent=n;
+  }catch(e){console.error(e)}
+}
+
+async function lancarNota(){
+  const uid=document.getElementById('notaAluno').value;
+  const disc=document.getElementById('notaDisc').value;
+  const val=document.getElementById('notaValor').value;
+  const dt=document.getElementById('notaData').value;
+  if(!uid||!val){alert('Selecione um aluno e insira a nota!');return}
+  if(parseFloat(val)<0||parseFloat(val)>10){alert('A nota deve ser entre 0 e 10!');return}
+  try{
+    // Get aluno name
+    const aDoc=await db.collection('usuarios').doc(uid).get();
+    const aNome=aDoc.exists?aDoc.data().nome:'Aluno';
+    // Save nota in aluno's subcollection
+    await db.collection('usuarios').doc(uid).collection('notas').add({
+      disciplina:disc,nota:parseFloat(val),data:dt,professor:profData.nome||profEmail,
+      criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    // Also save in global notas_lancadas for professor view
+    await db.collection('notas_lancadas').add({
+      alunoId:uid,alunoNome:aNome,disciplina:disc,nota:parseFloat(val),data:dt,
+      professor:profData.nome||profEmail,professorEmail:profEmail,
+      criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    alert('Nota lancada com sucesso!');
+    document.getElementById('notaValor').value='';
+    document.getElementById('notaData').value='';
+    loadNotasLancadas();
+  }catch(e){console.error(e);alert('Erro ao lancar nota.')}
+}
+
+async function loadNotasLancadas(){
+  try{
+    const snap=await db.collection('notas_lancadas').where('professorEmail','==',profEmail).orderBy('criadoEm','desc').get();
+    const tb=document.getElementById('tblNotas');
+    if(snap.empty){tb.innerHTML='<tr><td colspan="4" class="empty">Nenhuma nota lancada.</td></tr>';document.getElementById('stNotas').textContent='0';return}
+    let h='',n=0;
+    snap.forEach(doc=>{
+      const d=doc.data();n++;
+      h+='<tr><td><strong>'+d.alunoNome+'</strong></td><td>'+d.disciplina+'</td><td><strong>'+d.nota+'</strong></td><td>'+(d.data||'-')+'</td></tr>';
+    });
+    tb.innerHTML=h;
+    document.getElementById('stNotas').textContent=n;
+  }catch(e){console.error(e)}
+}
+
+async function loadMateriais(){
+  try{
+    const snap=await db.collection('materiais').where('professorEmail','==',profEmail).orderBy('criadoEm','desc').get();
+    const tb=document.getElementById('tblMat');
+    if(snap.empty){tb.innerHTML='<tr><td colspan="5" class="empty">Nenhum material.</td></tr>';document.getElementById('stMat').textContent='0';return}
+    let h='',n=0;
+    snap.forEach(doc=>{
+      const d=doc.data(),dt=d.criadoEm?d.criadoEm.toDate().toLocaleDateString('pt-BR'):'-';
+      n++;
+      h+='<tr><td><strong>'+d.titulo+'</strong></td><td>'+d.disciplina+'</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+d.conteudo+'</td><td>'+dt+'</td><td><button class="btn btn-s" style="background:var(--r);color:var(--w)" onclick="removeMat(\''+doc.id+'\')">Excluir</button></td></tr>';
+    });
+    tb.innerHTML=h;
+    document.getElementById('stMat').textContent=n;
+  }catch(e){console.error(e)}
+}
+
+async function addMaterial(){
+  const t=document.getElementById('matTitulo').value.trim(),d=document.getElementById('matDisc').value,c=document.getElementById('matConteudo').value.trim();
+  if(!t){alert('Preencha o titulo!');return}
+  await db.collection('materiais').add({
+    titulo:t,disciplina:d,conteudo:c,professor:profData.nome||profEmail,professorEmail:profEmail,
+    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  alert('Material publicado!');closeModal('mAddMat');
+  document.getElementById('matTitulo').value='';document.getElementById('matConteudo').value='';
+  loadMateriais();
+}
+
+async function removeMat(id){if(confirm('Excluir este material?')){await db.collection('materiais').doc(id).delete();loadMateriais()}}
+</script>
+</body>
+</html>

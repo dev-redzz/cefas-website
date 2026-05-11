@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin CESFA — Secretaria</title>
+<link rel="icon" type="image/png" href="img/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--p:#5C3A1E;--pd:#3B2310;--pp:#2A1809;--pl:#7A5230;--a:#C59A3F;--al:#D4AC5A;--cr:#FDF8F0;--cd:#F5ECE0;--ce:#EDE0CE;--w:#FFF;--t:#1A0F0A;--ts:#5A4535;--tm:#8A7565;--g:#2D7D3A;--gl:#E8F5E9;--r:#C62828;--rl:#FFEBEE;--o:#E65100;--ol:#FFF3E0;--b:#1565C0;--bl:#E3F2FD;--sh:0 2px 8px rgba(60,35,16,.06);--shm:0 4px 20px rgba(60,35,16,.1);--rd:12px;--tr:all .25s cubic-bezier(.4,0,.2,1);--fh:'Montserrat',sans-serif;--fb:'Lora',serif}
+html{font-size:16px}body{font-family:var(--fb);color:var(--t);background:#F7F3EE;min-height:100vh;display:flex}
+a{text-decoration:none;color:inherit}button{cursor:pointer;border:none;background:none;font-family:inherit}img{max-width:100%;display:block}
+input,select,textarea{font-family:var(--fb);font-size:.88rem}
+
+.loading{position:fixed;inset:0;background:var(--cr);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
+.loading img{width:80px;height:80px;border-radius:50%;margin-bottom:20px;animation:pulse 1.5s ease infinite}
+.loading span{font-family:var(--fh);font-size:.85rem;color:var(--tm)}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:.7}}
+.denied{display:none;position:fixed;inset:0;background:var(--cr);flex-direction:column;align-items:center;justify-content:center;z-index:9998;text-align:center;padding:40px}
+.denied h2{font-family:var(--fh);font-size:1.4rem;color:var(--r);margin-bottom:12px}
+.denied p{color:var(--tm);margin-bottom:24px}
+.denied a{padding:10px 28px;background:var(--p);color:var(--w);border-radius:8px;font-family:var(--fh);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+
+.app{display:flex;min-height:100vh;width:100%}
+.sb{width:250px;background:var(--pp);color:var(--w);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sb-hd{padding:18px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-hd img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.sb-hd div{font-family:var(--fh);font-weight:800;font-size:.85rem}
+.sb-hd small{display:block;font-size:.55rem;font-weight:600;color:#4FC3F7;margin-top:1px;text-transform:uppercase;letter-spacing:.08em}
+.sb-nav{flex:1;padding:12px 8px;display:flex;flex-direction:column;gap:1px}
+.sb-sec{padding:6px 14px;font-family:var(--fh);font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.18);margin-top:6px}
+.sb-lk{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-family:var(--fh);font-size:.75rem;font-weight:600;color:rgba(255,255,255,.4);transition:var(--tr)}
+.sb-lk:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.7)}
+.sb-lk.act{background:rgba(79,195,247,.08);color:#4FC3F7}
+.sb-lk svg{width:18px;height:18px;flex-shrink:0;stroke-width:1.5;fill:none}
+.sb-lk .bdg{margin-left:auto;background:var(--r);color:var(--w);font-size:.55rem;font-weight:800;padding:2px 7px;border-radius:10px}
+.sb-ft{padding:12px;border-top:1px solid rgba(255,255,255,.06)}
+.sb-ft button{width:100%;padding:10px 14px;border-radius:8px;font-family:var(--fh);font-size:.7rem;font-weight:700;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:8px;transition:var(--tr);text-transform:uppercase;letter-spacing:.04em}
+.sb-ft button:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.6)}
+.sb-ft svg{width:16px;height:16px}
+
+.mn{flex:1;margin-left:250px}
+.tp{background:var(--w);border-bottom:1px solid rgba(0,0,0,.04);padding:16px 36px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+.tp h1{font-family:var(--fh);font-size:1.2rem;font-weight:900;color:var(--pd)}
+.tp h1 span{color:#4FC3F7}
+.tp-date{font-size:.75rem;color:var(--tm);font-family:var(--fh);font-weight:500;margin-top:2px}
+.tp-acts{display:flex;gap:8px}
+.tp-btn{padding:8px 20px;border-radius:8px;font-family:var(--fh);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:var(--tr)}
+.tp-btn-p{background:var(--p);color:var(--w)}.tp-btn-p:hover{background:var(--pd)}
+.tp-btn-o{border:1.5px solid var(--ce);color:var(--tm)}.tp-btn-o:hover{border-color:var(--pl);color:var(--p)}
+
+.mc{padding:28px 36px;max-width:1200px}
+.pg{display:none}.pg.act{display:block}
+.cd{background:var(--w);border-radius:var(--rd);box-shadow:var(--sh);overflow:hidden;margin-bottom:22px}
+.cd-h{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--cd)}
+.cd-t{font-family:var(--fh);font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--pd)}
+.cd-b{padding:22px}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.st{background:var(--w);border-radius:var(--rd);padding:20px;box-shadow:var(--sh);transition:var(--tr)}
+.st:hover{transform:translateY(-2px);box-shadow:var(--shm)}
+.st-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.st-ic svg{width:18px;height:18px;stroke:var(--w);fill:none;stroke-width:1.5}
+.st-lb{font-family:var(--fh);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tm);margin-bottom:4px}
+.st-vl{font-family:var(--fh);font-size:1.6rem;font-weight:900;color:var(--pd)}
+
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-family:var(--fh);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tm);padding:10px 14px;text-align:left;border-bottom:2px solid var(--cd);background:var(--cr)}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--cd);font-size:.82rem;color:var(--ts)}
+.tbl tr:hover td{background:var(--cr)}
+.badge{padding:3px 10px;border-radius:16px;font-family:var(--fh);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;display:inline-block}
+.badge-g{background:var(--gl);color:var(--g)}.badge-o{background:var(--ol);color:var(--o)}.badge-r{background:var(--rl);color:var(--r)}.badge-b{background:var(--bl);color:var(--b)}
+.abtn{display:flex;gap:5px}
+
+.btn{padding:8px 20px;border-radius:8px;font-family:var(--fh);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:var(--tr);display:inline-flex;align-items:center;gap:6px}
+.btn-p{background:var(--p);color:var(--w)}.btn-p:hover{background:var(--pd)}
+.btn-a{background:var(--a);color:var(--pd)}.btn-a:hover{background:var(--al)}
+.btn-g{background:var(--g);color:var(--w)}.btn-g:hover{background:#256829}
+.btn-r{background:var(--r);color:var(--w)}.btn-r:hover{background:#9B1E1E}
+.btn-s{padding:6px 14px;font-size:.65rem}
+
+.modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(42,24,9,.55);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px}
+.modal.act{display:flex}
+.modal-c{background:var(--w);border-radius:var(--rd);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.modal-h{padding:22px 26px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.modal-t{font-family:var(--fh);font-size:1rem;font-weight:900;color:var(--pd);text-transform:uppercase;letter-spacing:.02em}
+.modal-x{width:34px;height:34px;border-radius:50%;background:var(--cr);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--tm);transition:var(--tr);flex-shrink:0}
+.modal-x:hover{background:var(--ce)}
+.modal-b{padding:18px 26px 26px}
+
+.fg{margin-bottom:14px}
+.fl{display:block;font-family:var(--fh);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ts);margin-bottom:4px}
+.fi,.fs,.ft{width:100%;padding:10px 13px;border:1.5px solid var(--ce);border-radius:8px;font-size:.85rem;transition:var(--tr);background:var(--cr)}
+.fi:focus,.fs:focus,.ft:focus{outline:none;border-color:var(--pl);background:var(--w)}
+.ft{min-height:70px;resize:vertical}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.empty{text-align:center;padding:40px 20px;color:var(--tm);font-size:.9rem}
+
+@media(max-width:1024px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.sb{display:none}.mn{margin-left:0}.mc{padding:20px}.stats{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.tp{padding:14px 20px}}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading"><img src="img/logo.png" alt=""><span>Carregando painel...</span></div>
+<div class="denied" id="denied"><h2>Acesso Negado</h2><p>Voce nao tem permissao para acessar o painel administrativo.</p><a href="index.html">Voltar ao Site</a></div>
+
+<div class="app" id="app" style="display:none">
+<aside class="sb">
+  <div class="sb-hd"><img src="img/logo.png" alt=""><div>CESFA<small>Painel Admin</small></div></div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Painel</div>
+    <a href="#" class="sb-lk act" onclick="pg('dash',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z"/></svg>Dashboard</a>
+    <div class="sb-sec">Cadastros</div>
+    <a href="#" class="sb-lk" onclick="pg('alunos',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>Alunos <span class="bdg" id="bdgAlunos" style="display:none">0</span></a>
+    <a href="#" class="sb-lk" onclick="pg('profs',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/></svg>Professores</a>
+    <a href="#" class="sb-lk" onclick="pg('inscricoes',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>Inscricoes <span class="bdg" id="bdgInsc" style="display:none">0</span></a>
+    <div class="sb-sec">Conteudo</div>
+    <a href="#" class="sb-lk" onclick="pg('cursos',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>Cursos</a>
+    <a href="#" class="sb-lk" onclick="pg('noticias',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg>Noticias</a>
+    <a href="#" class="sb-lk" onclick="pg('calendario',this)"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>Calendario</a>
+  </nav>
+  <div class="sb-ft"><button onclick="doLogout()"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>Sair</button></div>
+</aside>
+
+<div class="mn">
+<div class="tp"><div><h1>Painel <span>Administrativo</span></h1><p class="tp-date" id="tpDate"></p></div><div class="tp-acts"><a href="index.html" class="tp-btn tp-btn-o">Ver Site</a></div></div>
+<div class="mc">
+
+<!-- DASHBOARD -->
+<div class="pg act" id="pgDash">
+<div class="stats">
+  <div class="st"><div class="st-ic" style="background:var(--p)"><svg viewBox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg></div><div class="st-lb">Alunos</div><div class="st-vl" id="stAlunos">0</div></div>
+  <div class="st"><div class="st-ic" style="background:var(--b)"><svg viewBox="0 0 24 24"><path d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342"/></svg></div><div class="st-lb">Professores</div><div class="st-vl" id="stProfs">0</div></div>
+  <div class="st"><div class="st-ic" style="background:var(--a)"><svg viewBox="0 0 24 24"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25v14.25m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292"/></svg></div><div class="st-lb">Cursos</div><div class="st-vl" id="stCursos">0</div></div>
+  <div class="st"><div class="st-ic" style="background:var(--o)"><svg viewBox="0 0 24 24"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg></div><div class="st-lb">Inscricoes Pendentes</div><div class="st-vl" id="stPend">0</div></div>
+</div>
+<div class="cd"><div class="cd-h"><span class="cd-t">Ultimas Inscricoes</span></div><div class="cd-b"><table class="tbl"><thead><tr><th>Nome</th><th>Curso</th><th>Data</th><th>Status</th></tr></thead><tbody id="dashInsc"><tr><td colspan="4" class="empty">Carregando...</td></tr></tbody></table></div></div>
+</div>
+
+<!-- ALUNOS -->
+<div class="pg" id="pgAlunos">
+<div class="cd"><div class="cd-h"><span class="cd-t">Alunos Cadastrados</span><button class="btn btn-a btn-s" onclick="openModal('mAddAluno')">+ Novo Aluno</button></div><div class="cd-b"><table class="tbl"><thead><tr><th>Nome</th><th>Email</th><th>Curso</th><th>Status</th><th>Acoes</th></tr></thead><tbody id="tblAlunos"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody></table></div></div>
+</div>
+
+<!-- PROFESSORES -->
+<div class="pg" id="pgProfs">
+<div class="cd"><div class="cd-h"><span class="cd-t">Professores Cadastrados</span><button class="btn btn-a btn-s" onclick="openModal('mAddProf')">+ Novo Professor</button></div><div class="cd-b"><table class="tbl"><thead><tr><th>Nome</th><th>Email</th><th>Disciplina</th><th>Acoes</th></tr></thead><tbody id="tblProfs"><tr><td colspan="4" class="empty">Nenhum professor cadastrado.</td></tr></tbody></table></div></div>
+</div>
+
+<!-- INSCRICOES -->
+<div class="pg" id="pgInscricoes">
+<div class="cd"><div class="cd-h"><span class="cd-t">Inscricoes de Cursos</span></div><div class="cd-b"><table class="tbl"><thead><tr><th>Nome</th><th>Email</th><th>Curso</th><th>Idade</th><th>Telefone</th><th>Data</th><th>Status</th><th>Acoes</th></tr></thead><tbody id="tblInsc"><tr><td colspan="8" class="empty">Carregando...</td></tr></tbody></table></div></div>
+</div>
+
+<!-- CURSOS -->
+<div class="pg" id="pgCursos">
+<div class="cd"><div class="cd-h"><span class="cd-t">Cursos Disponiveis</span><button class="btn btn-a btn-s" onclick="openModal('mAddCurso')">+ Novo Curso</button></div><div class="cd-b"><table class="tbl"><thead><tr><th>Nome</th><th>Vagas</th><th>Horario</th><th>Status</th><th>Acoes</th></tr></thead><tbody id="tblCursos"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody></table></div></div>
+</div>
+
+<!-- NOTICIAS -->
+<div class="pg" id="pgNoticias">
+<div class="cd"><div class="cd-h"><span class="cd-t">Noticias do Site</span><button class="btn btn-a btn-s" onclick="openModal('mAddNoticia')">+ Nova Noticia</button></div><div class="cd-b"><table class="tbl"><thead><tr><th>Titulo</th><th>Categoria</th><th>Data</th><th>Acoes</th></tr></thead><tbody id="tblNoticias"><tr><td colspan="4" class="empty">Nenhuma noticia.</td></tr></tbody></table></div></div>
+</div>
+
+<!-- CALENDARIO -->
+<div class="pg" id="pgCalendario">
+<div class="cd"><div class="cd-h"><span class="cd-t">Calendario Escolar</span><button class="btn btn-a btn-s" onclick="openModal('mAddEvento')">+ Novo Evento</button></div><div class="cd-b"><table class="tbl"><thead><tr><th>Evento</th><th>Data</th><th>Local</th><th>Tipo</th><th>Acoes</th></tr></thead><tbody id="tblEventos"><tr><td colspan="5" class="empty">Nenhum evento.</td></tr></tbody></table></div></div>
+</div>
+
+</div></div></div>
+
+<!-- MODALS -->
+<!-- Add Aluno -->
+<div class="modal" id="mAddAluno"><div class="modal-c"><div class="modal-h"><h2 class="modal-t">Cadastrar Aluno</h2><button class="modal-x" onclick="closeModal('mAddAluno')">&#x2715;</button></div><div class="modal-b">
+<div class="fg"><label class="fl">Nome Completo</label><input class="fi" id="alunoNome"></div>
+<div class="fr"><div class="fg"><label class="fl">Email</label><input class="fi" id="alunoEmail" type="email"></div><div class="fg"><label class="fl">Telefone</label><input class="fi" id="alunoTel"></div></div>
+<div class="fg"><label class="fl">Curso</label><select class="fs" id="alunoCurso"><option value="">Selecione...</option></select></div>
+<button class="btn btn-g" onclick="addAluno()">Cadastrar Aluno</button>
+</div></div></div>
+
+<!-- Add Professor -->
+<div class="modal" id="mAddProf"><div class="modal-c"><div class="modal-h"><h2 class="modal-t">Cadastrar Professor</h2><button class="modal-x" onclick="closeModal('mAddProf')">&#x2715;</button></div><div class="modal-b">
+<div class="fg"><label class="fl">Nome Completo</label><input class="fi" id="profNome"></div>
+<div class="fr"><div class="fg"><label class="fl">Email (Google)</label><input class="fi" id="profEmail" type="email" placeholder="email@gmail.com"></div><div class="fg"><label class="fl">Telefone</label><input class="fi" id="profTel"></div></div>
+<div class="fg"><label class="fl">Disciplina / Area</label><input class="fi" id="profDisc" placeholder="Ex: Matematica, Portugues"></div>
+<p style="font-size:.78rem;color:var(--tm);margin-bottom:16px">O professor devera fazer login com este email Google para acessar o portal.</p>
+<button class="btn btn-g" onclick="addProf()">Cadastrar Professor</button>
+</div></div></div>
+
+<!-- Add Curso -->
+<div class="modal" id="mAddCurso"><div class="modal-c"><div class="modal-h"><h2 class="modal-t">Novo Curso</h2><button class="modal-x" onclick="closeModal('mAddCurso')">&#x2715;</button></div><div class="modal-b">
+<div class="fg"><label class="fl">Nome do Curso</label><input class="fi" id="cursoNome"></div>
+<div class="fg"><label class="fl">Descricao</label><textarea class="ft" id="cursoDesc"></textarea></div>
+<div class="fr"><div class="fg"><label class="fl">Vagas</label><input class="fi" id="cursoVagas" type="number"></div><div class="fg"><label class="fl">Duracao</label><input class="fi" id="cursoDur" placeholder="Ex: 6 meses"></div></div>
+<div class="fr"><div class="fg"><label class="fl">Horario</label><input class="fi" id="cursoHor" placeholder="Ex: Seg-Sex 14h-17h"></div><div class="fg"><label class="fl">Faixa Etaria</label><input class="fi" id="cursoIdade" placeholder="Ex: 8 a 16 anos"></div></div>
+<div class="fg"><label class="fl">Status</label><select class="fs" id="cursoStatus"><option value="aberto">Aberto</option><option value="fechado">Fechado</option></select></div>
+<button class="btn btn-g" onclick="addCurso()">Criar Curso</button>
+</div></div></div>
+
+<!-- Add Noticia -->
+<div class="modal" id="mAddNoticia"><div class="modal-c"><div class="modal-h"><h2 class="modal-t">Nova Noticia</h2><button class="modal-x" onclick="closeModal('mAddNoticia')">&#x2715;</button></div><div class="modal-b">
+<div class="fg"><label class="fl">Titulo</label><input class="fi" id="noticTitulo"></div>
+<div class="fg"><label class="fl">Categoria</label><select class="fs" id="noticCat"><option>CESFA</option><option>Comunidade</option><option>Eventos</option><option>Educacao</option></select></div>
+<div class="fg"><label class="fl">Conteudo</label><textarea class="ft" id="noticConteudo" style="min-height:120px"></textarea></div>
+<button class="btn btn-g" onclick="addNoticia()">Publicar Noticia</button>
+</div></div></div>
+
+<!-- Add Evento -->
+<div class="modal" id="mAddEvento"><div class="modal-c"><div class="modal-h"><h2 class="modal-t">Novo Evento</h2><button class="modal-x" onclick="closeModal('mAddEvento')">&#x2715;</button></div><div class="modal-b">
+<div class="fg"><label class="fl">Nome do Evento</label><input class="fi" id="evtNome"></div>
+<div class="fr"><div class="fg"><label class="fl">Data</label><input class="fi" id="evtData" type="date"></div><div class="fg"><label class="fl">Tipo</label><select class="fs" id="evtTipo"><option>Retiro</option><option>Encontro</option><option>Celebracao</option><option>Reuniao</option><option>Aula</option></select></div></div>
+<div class="fg"><label class="fl">Local</label><input class="fi" id="evtLocal" placeholder="Ex: CESFA - Caxias, MA"></div>
+<div class="fg"><label class="fl">Descricao</label><textarea class="ft" id="evtDesc"></textarea></div>
+<button class="btn btn-g" onclick="addEvento()">Criar Evento</button>
+</div></div></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyBfIbx48JjQ0SbETDp4a-wwR9_lBAbhX70",authDomain:"cefas-website.firebaseapp.com",projectId:"cefas-website",storageBucket:"cefas-website.firebasestorage.app",messagingSenderId:"474668252634",appId:"1:474668252634:web:be627269a5a00de78294e3"});
+const auth=firebase.auth(),db=firebase.firestore();
+const ADMIN='redzenzag@gmail.com';
+
+auth.onAuthStateChanged(u=>{
+  if(!u){window.location.href='index.html';return}
+  if(u.email!==ADMIN){document.getElementById('loading').style.display='none';document.getElementById('denied').style.display='flex';return}
+  document.getElementById('loading').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('tpDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  loadAll();
+});
+
+function pg(p,el){
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('act'));
+  document.querySelectorAll('.sb-lk').forEach(x=>x.classList.remove('act'));
+  const map={dash:'pgDash',alunos:'pgAlunos',profs:'pgProfs',inscricoes:'pgInscricoes',cursos:'pgCursos',noticias:'pgNoticias',calendario:'pgCalendario'};
+  document.getElementById(map[p]).classList.add('act');
+  if(el)el.classList.add('act');
+  if(p==='inscricoes')loadInscricoes();
+  if(p==='alunos')loadAlunos();
+  if(p==='profs')loadProfs();
+  if(p==='cursos')loadCursos();
+  if(p==='noticias')loadNoticias();
+  if(p==='calendario')loadEventos();
+}
+
+function openModal(id){document.getElementById(id).classList.add('act');document.body.style.overflow='hidden'}
+function closeModal(id){document.getElementById(id).classList.remove('act');document.body.style.overflow=''}
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.act').forEach(m=>closeModal(m.id))});
+
+async function loadAll(){loadInscricoes();loadAlunos();loadProfs();loadCursos();loadNoticias();loadEventos();loadDashStats()}
+
+async function loadDashStats(){
+  try{
+    const [al,pr,cu,ins]=await Promise.all([
+      db.collection('usuarios').where('tipo','==','aluno').get(),
+      db.collection('professores').get(),
+      db.collection('cursos').get(),
+      db.collection('inscricoes').where('status','==','pendente').get()
+    ]);
+    document.getElementById('stAlunos').textContent=al.size;
+    document.getElementById('stProfs').textContent=pr.size;
+    document.getElementById('stCursos').textContent=cu.size;
+    document.getElementById('stPend').textContent=ins.size;
+    if(ins.size>0){document.getElementById('bdgInsc').style.display='';document.getElementById('bdgInsc').textContent=ins.size}
+  }catch(e){console.error(e)}
+}
+
+async function loadInscricoes(){
+  try{
+    const snap=await db.collection('inscricoes').orderBy('criadoEm','desc').get();
+    const tb=document.getElementById('tblInsc');
+    const dtb=document.getElementById('dashInsc');
+    if(snap.empty){tb.innerHTML='<tr><td colspan="8" class="empty">Nenhuma inscricao.</td></tr>';dtb.innerHTML='<tr><td colspan="4" class="empty">Nenhuma inscricao.</td></tr>';return}
+    let h='',dh='',c=0;
+    snap.forEach(doc=>{
+      const d=doc.data(),dt=d.criadoEm?d.criadoEm.toDate().toLocaleDateString('pt-BR'):'-';
+      let bc='badge-o',bt='Pendente';
+      if(d.status==='aprovado'){bc='badge-g';bt='Aprovado'}
+      if(d.status==='rejeitado'){bc='badge-r';bt='Rejeitado'}
+      if(d.status==='pendente')c++;
+      const acts=d.status==='pendente'?'<div class="abtn"><button class="btn btn-g btn-s" onclick="approveInsc(\''+doc.id+'\',\''+d.userId+'\',\''+d.courseId+'\')">Aprovar</button><button class="btn btn-r btn-s" onclick="rejectInsc(\''+doc.id+'\',\''+d.userId+'\')">Rejeitar</button></div>':'-';
+      h+='<tr><td><strong>'+d.nome+'</strong></td><td>'+d.email+'</td><td>'+d.curso+'</td><td>'+d.idade+'</td><td>'+d.telefone+'</td><td>'+dt+'</td><td><span class="badge '+bc+'">'+bt+'</span></td><td>'+acts+'</td></tr>';
+      dh+='<tr><td><strong>'+d.nome+'</strong></td><td>'+d.curso+'</td><td>'+dt+'</td><td><span class="badge '+bc+'">'+bt+'</span></td></tr>';
+    });
+    tb.innerHTML=h;dtb.innerHTML=dh;
+    if(c>0){document.getElementById('bdgInsc').style.display='';document.getElementById('bdgInsc').textContent=c}else{document.getElementById('bdgInsc').style.display='none'}
+  }catch(e){console.error(e)}
+}
+
+async function approveInsc(id,uid,cid){
+  await db.collection('inscricoes').doc(id).update({status:'aprovado'});
+  await db.collection('usuarios').doc(uid).update({tipo:'aluno',status:'aprovado'});
+  if(cid)await db.collection('usuarios').doc(uid).collection('cursos').doc(cid).set({courseId:cid,progresso:0,inscritoEm:firebase.firestore.FieldValue.serverTimestamp()});
+  alert('Aprovado!');loadInscricoes();loadDashStats();loadAlunos();
+}
+async function rejectInsc(id,uid){
+  await db.collection('inscricoes').doc(id).update({status:'rejeitado'});
+  await db.collection('usuarios').doc(uid).update({status:'rejeitado'});
+  alert('Rejeitado.');loadInscricoes();loadDashStats();
+}
+
+async function loadAlunos(){
+  try{
+    const snap=await db.collection('usuarios').where('tipo','==','aluno').get();
+    const tb=document.getElementById('tblAlunos');
+    if(snap.empty){tb.innerHTML='<tr><td colspan="5" class="empty">Nenhum aluno cadastrado.</td></tr>';return}
+    let h='';
+    snap.forEach(doc=>{
+      const d=doc.data();
+      h+='<tr><td><strong>'+(d.nome||'-')+'</strong></td><td>'+d.email+'</td><td>'+(d.cursoNome||'-')+'</td><td><span class="badge badge-g">Ativo</span></td><td><button class="btn btn-r btn-s" onclick="removeUser(\''+doc.id+'\')">Remover</button></td></tr>';
+    });
+    tb.innerHTML=h;
+    document.getElementById('bdgAlunos').style.display=snap.size>0?'':'none';
+    document.getElementById('bdgAlunos').textContent=snap.size;
+  }catch(e){console.error(e)}
+}
+
+async function addAluno(){
+  const n=document.getElementById('alunoNome').value.trim(),e=document.getElementById('alunoEmail').value.trim(),t=document.getElementById('alunoTel').value.trim(),c=document.getElementById('alunoCurso').value;
+  if(!n||!e){alert('Preencha nome e email!');return}
+  await db.collection('usuarios').doc(e.replace(/[^a-zA-Z0-9]/g,'_')).set({nome:n,email:e,telefone:t,tipo:'aluno',status:'aprovado',cursoNome:c,criadoEm:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+  alert('Aluno cadastrado!');closeModal('mAddAluno');loadAlunos();loadDashStats();
+}
+
+async function loadProfs(){
+  try{
+    const snap=await db.collection('professores').get();
+    const tb=document.getElementById('tblProfs');
+    if(snap.empty){tb.innerHTML='<tr><td colspan="4" class="empty">Nenhum professor.</td></tr>';return}
+    let h='';
+    snap.forEach(doc=>{
+      const d=doc.data();
+      h+='<tr><td><strong>'+d.nome+'</strong></td><td>'+d.email+'</td><td>'+(d.disciplina||'-')+'</td><td><button class="btn btn-r btn-s" onclick="removeProf(\''+doc.id+'\')">Remover</button></td></tr>';
+    });
+    tb.innerHTML=h;
+  }catch(e){console.error(e)}
+}
+
+async function addProf(){
+  const n=document.getElementById('profNome').value.trim(),e=document.getElementById('profEmail').value.trim(),t=document.getElementById('profTel').value.trim(),d=document.getElementById('profDisc').value.trim();
+  if(!n||!e){alert('Preencha nome e email!');return}
+  await db.collection('professores').doc(e.replace(/[^a-zA-Z0-9]/g,'_')).set({nome:n,email:e,telefone:t,disciplina:d,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+  alert('Professor cadastrado! Ele podera acessar o portal com este email Google.');closeModal('mAddProf');loadProfs();loadDashStats();
+}
+
+async function removeProf(id){if(confirm('Remover este professor?')){await db.collection('professores').doc(id).delete();loadProfs();loadDashStats()}}
+async function removeUser(id){if(confirm('Remover este aluno?')){await db.collection('usuarios').doc(id).update({tipo:'visitante',status:'removido'});loadAlunos();loadDashStats()}}
+
+async function loadCursos(){
+  try{
+    const snap=await db.collection('cursos').get();
+    const tb=document.getElementById('tblCursos');
+    const sel=document.getElementById('alunoCurso');
+    sel.innerHTML='<option value="">Selecione...</option>';
+    if(snap.empty){tb.innerHTML='<tr><td colspan="5" class="empty">Nenhum curso.</td></tr>';return}
+    let h='';
+    snap.forEach(doc=>{
+      const d=doc.data();
+      const sc=d.status==='aberto'?'badge-g':'badge-r',st=d.status==='aberto'?'Aberto':'Fechado';
+      h+='<tr><td><strong>'+d.nome+'</strong></td><td>'+(d.vagas||'-')+'</td><td>'+(d.horario||'-')+'</td><td><span class="badge '+sc+'">'+st+'</span></td><td><button class="btn btn-r btn-s" onclick="removeCurso(\''+doc.id+'\')">Excluir</button></td></tr>';
+      sel.innerHTML+='<option value="'+d.nome+'">'+d.nome+'</option>';
+    });
+    tb.innerHTML=h;
+  }catch(e){console.error(e)}
+}
+
+async function addCurso(){
+  const n=document.getElementById('cursoNome').value.trim(),d=document.getElementById('cursoDesc').value.trim(),v=document.getElementById('cursoVagas').value,du=document.getElementById('cursoDur').value.trim(),ho=document.getElementById('cursoHor').value.trim(),id=document.getElementById('cursoIdade').value.trim(),s=document.getElementById('cursoStatus').value;
+  if(!n){alert('Preencha o nome!');return}
+  await db.collection('cursos').add({nome:n,descricao:d,vagas:parseInt(v)||0,duracao:du,horario:ho,faixaEtaria:id,status:s,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+  alert('Curso criado!');closeModal('mAddCurso');loadCursos();loadDashStats();
+}
+async function removeCurso(id){if(confirm('Excluir este curso?')){await db.collection('cursos').doc(id).delete();loadCursos();loadDashStats()}}
+
+async function loadNoticias(){
+  try{
+    const snap=await db.collection('noticias').orderBy('criadoEm','desc').get();
+    const tb=document.getElementById('tblNoticias');
+    if(snap.empty){tb.innerHTML='<tr><td colspan="4" class="empty">Nenhuma noticia.</td></tr>';return}
+    let h='';
+    snap.forEach(doc=>{
+      const d=doc.data(),dt=d.criadoEm?d.criadoEm.toDate().toLocaleDateString('pt-BR'):'-';
+      h+='<tr><td><strong>'+d.titulo+'</strong></td><td>'+d.categoria+'</td><td>'+dt+'</td><td><button class="btn btn-r btn-s" onclick="removeNoticia(\''+doc.id+'\')">Excluir</button></td></tr>';
+    });
+    tb.innerHTML=h;
+  }catch(e){console.error(e)}
+}
+
+async function addNoticia(){
+  const t=document.getElementById('noticTitulo').value.trim(),c=document.getElementById('noticCat').value,co=document.getElementById('noticConteudo').value.trim();
+  if(!t){alert('Preencha o titulo!');return}
+  await db.collection('noticias').add({titulo:t,categoria:c,conteudo:co,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+  alert('Noticia publicada!');closeModal('mAddNoticia');loadNoticias();
+}
+async function removeNoticia(id){if(confirm('Excluir?')){await db.collection('noticias').doc(id).delete();loadNoticias()}}
+
+async function loadEventos(){
+  try{
+    const snap=await db.collection('eventos').orderBy('data','asc').get();
+    const tb=document.getElementById('tblEventos');
+    if(snap.empty){tb.innerHTML='<tr><td colspan="5" class="empty">Nenhum evento.</td></tr>';return}
+    let h='';
+    snap.forEach(doc=>{
+      const d=doc.data();
+      h+='<tr><td><strong>'+d.nome+'</strong></td><td>'+d.data+'</td><td>'+(d.local||'-')+'</td><td><span class="badge badge-b">'+d.tipo+'</span></td><td><button class="btn btn-r btn-s" onclick="removeEvento(\''+doc.id+'\')">Excluir</button></td></tr>';
+    });
+    tb.innerHTML=h;
+  }catch(e){console.error(e)}
+}
+
+async function addEvento(){
+  const n=document.getElementById('evtNome').value.trim(),d=document.getElementById('evtData').value,t=document.getElementById('evtTipo').value,l=document.getElementById('evtLocal').value.trim(),ds=document.getElementById('evtDesc').value.trim();
+  if(!n||!d){alert('Preencha nome e data!');return}
+  await db.collection('eventos').add({nome:n,data:d,tipo:t,local:l,descricao:ds,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+  alert('Evento criado!');closeModal('mAddEvento');loadEventos();
+}
+async function removeEvento(id){if(confirm('Excluir?')){await db.collection('eventos').doc(id).delete();loadEventos()}}
+
+function doLogout(){auth.signOut().then(()=>window.location.href='index.html')}
+</script>
+</body>
+</html>
