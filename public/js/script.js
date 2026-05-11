@@ -1,7 +1,7 @@
 // ============================================
 // FIREBASE CONFIG
 // ============================================
-const firebaseConfig = {
+firebase.initializeApp({
   apiKey: "AIzaSyBfIbx48JjQ0SbETDp4a-wwR9_lBAbhX70",
   authDomain: "cefas-website.firebaseapp.com",
   projectId: "cefas-website",
@@ -9,31 +9,133 @@ const firebaseConfig = {
   messagingSenderId: "474668252634",
   appId: "1:474668252634:web:be627269a5a00de78294e3",
   measurementId: "G-MNCB2Z9XDC"
-};
-
-firebase.initializeApp(firebaseConfig);
+});
 const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const ADMIN_EMAIL = 'redzenzag@gmail.com';
 
-// Navbar scroll
+// ============================================
+// SYNC USER: quando login acontece, verifica se o admin
+// ja cadastrou esse email e vincula ao UID do Firebase Auth
+// ============================================
+async function syncUser(user) {
+  const uid = user.uid;
+  const email = user.email;
+
+  // 1) Check if UID doc already exists and is configured
+  const uidDoc = await db.collection('usuarios').doc(uid).get();
+  if (uidDoc.exists && uidDoc.data().tipo && uidDoc.data().tipo !== 'visitante') {
+    // Already synced, just update login time
+    await db.collection('usuarios').doc(uid).update({
+      ultimoLogin: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    return uidDoc.data();
+  }
+
+  // 2) Search if admin registered this email (doc ID = email sanitized)
+  const emailKey = email.replace(/[^a-zA-Z0-9]/g, '_');
+  const adminDoc = await db.collection('usuarios').doc(emailKey).get();
+
+  if (adminDoc.exists && adminDoc.data().tipo === 'aluno') {
+    // Admin registered this person! Copy data to UID doc
+    const data = adminDoc.data();
+    await db.collection('usuarios').doc(uid).set({
+      nome: user.displayName || data.nome,
+      email: email,
+      foto: user.photoURL || '',
+      tipo: data.tipo,
+      status: data.status,
+      cursoNome: data.cursoNome || '',
+      telefone: data.telefone || '',
+      criadoEm: data.criadoEm || firebase.firestore.FieldValue.serverTimestamp(),
+      ultimoLogin: firebase.firestore.FieldValue.serverTimestamp(),
+      vinculadoDe: emailKey
+    });
+    // Delete old email-keyed doc to avoid confusion
+    await db.collection('usuarios').doc(emailKey).delete();
+    return { tipo: data.tipo, status: data.status };
+  }
+
+  // 3) Also check by email field query (in case doc was created differently)
+  const emailQuery = await db.collection('usuarios').where('email', '==', email).get();
+  let found = null;
+  emailQuery.forEach(doc => {
+    if (doc.id !== uid && doc.data().tipo === 'aluno') {
+      found = { id: doc.id, data: doc.data() };
+    }
+  });
+
+  if (found) {
+    await db.collection('usuarios').doc(uid).set({
+      nome: user.displayName || found.data.nome,
+      email: email,
+      foto: user.photoURL || '',
+      tipo: found.data.tipo,
+      status: found.data.status,
+      cursoNome: found.data.cursoNome || '',
+      telefone: found.data.telefone || '',
+      criadoEm: found.data.criadoEm || firebase.firestore.FieldValue.serverTimestamp(),
+      ultimoLogin: firebase.firestore.FieldValue.serverTimestamp(),
+      vinculadoDe: found.id
+    });
+    await db.collection('usuarios').doc(found.id).delete();
+    return { tipo: found.data.tipo, status: found.data.status };
+  }
+
+  // 4) No admin registration found - create as visitante
+  if (!uidDoc.exists) {
+    await db.collection('usuarios').doc(uid).set({
+      nome: user.displayName || '',
+      email: email,
+      foto: user.photoURL || '',
+      tipo: 'visitante',
+      status: 'ativo',
+      criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+      ultimoLogin: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } else {
+    await db.collection('usuarios').doc(uid).update({
+      ultimoLogin: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }
+  return uidDoc.exists ? uidDoc.data() : { tipo: 'visitante', status: 'ativo' };
+}
+
+// ============================================
+// ROLE-BASED REDIRECT
+// ============================================
+async function redirectToPortal(user, userData) {
+  if (user.email === ADMIN_EMAIL) {
+    window.location.href = 'admin.html'; return;
+  }
+  // Check professor (by email in professores collection)
+  try {
+    const profSnap = await db.collection('professores').where('email', '==', user.email).get();
+    if (!profSnap.empty) {
+      window.location.href = 'portal-professor.html'; return;
+    }
+  } catch (e) { console.error(e) }
+  // Check aluno
+  if (userData && userData.tipo === 'aluno' && userData.status === 'aprovado') {
+    window.location.href = 'portal.html'; return;
+  }
+  alert('Bem-vindo! Para acessar o portal, faca sua inscricao em um dos nossos cursos na secao Atuacao.');
+}
+
+// ============================================
+// UI HELPERS
+// ============================================
 const navbar = document.getElementById('navbar');
 const scrollTop = document.getElementById('scrollTop');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('nav--scrolled', window.scrollY > 50);
   scrollTop.classList.toggle('visible', window.scrollY > 400);
 });
-
-// Mobile menu
 function toggleMobile() { document.getElementById('mobileMenu').classList.toggle('active') }
-
-// Login modal
 function openLogin() { document.getElementById('loginModal').classList.add('active'); document.body.style.overflow = 'hidden' }
 function closeLogin() { document.getElementById('loginModal').classList.remove('active'); document.body.style.overflow = '' }
 function switchTab(el) { document.querySelectorAll('.login-modal__tab').forEach(t => t.classList.remove('active')); el.classList.add('active') }
-
-// Gallery filter
 function filterGallery(btn, cat) {
   document.querySelectorAll('.gallery__filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -41,46 +143,13 @@ function filterGallery(btn, cat) {
     item.style.display = (cat === 'todos' || item.dataset.category === cat) ? '' : 'none';
   });
 }
-
-// Lightbox
 function openLightbox(cap) { document.getElementById('lightboxCaption').textContent = cap; document.getElementById('lightbox').classList.add('active'); document.body.style.overflow = 'hidden' }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow = '' }
-
-// Scroll reveal
 const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }) }, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-// Close modals on ESC
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeLogin(); closeLightbox(); closeInscricaoModal() }
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLogin(); closeLightbox(); closeInscricaoModal() } });
 document.getElementById('loginModal').addEventListener('click', e => { if (e.target === document.getElementById('loginModal')) closeLogin() });
 document.getElementById('lightbox').addEventListener('click', e => { if (e.target === document.getElementById('lightbox')) closeLightbox() });
-
-// ============================================
-// ROLE-BASED REDIRECT
-// ============================================
-async function redirectToPortal(user) {
-  if (user.email === ADMIN_EMAIL) {
-    window.location.href = 'admin.html';
-    return;
-  }
-  try {
-    const profSnap = await db.collection('professores').where('email', '==', user.email).get();
-    if (!profSnap.empty) {
-      window.location.href = 'portal-professor.html';
-      return;
-    }
-  } catch (e) { console.error(e) }
-  try {
-    const doc = await db.collection('usuarios').doc(user.uid).get();
-    if (doc.exists && doc.data().tipo === 'aluno' && doc.data().status === 'aprovado') {
-      window.location.href = 'portal.html';
-      return;
-    }
-  } catch (e) { console.error(e) }
-  alert('Bem-vindo! Para acessar o portal, faca sua inscricao em um dos nossos cursos na secao Atuacao.');
-}
 
 // ============================================
 // LOGIN COM GOOGLE
@@ -89,24 +158,9 @@ document.getElementById('googleLoginBtn').addEventListener('click', async () => 
   try {
     const result = await auth.signInWithPopup(googleProvider);
     const user = result.user;
-    const userDoc = await db.collection('usuarios').doc(user.uid).get();
-    if (!userDoc.exists) {
-      await db.collection('usuarios').doc(user.uid).set({
-        nome: user.displayName,
-        email: user.email,
-        foto: user.photoURL,
-        tipo: 'visitante',
-        status: 'ativo',
-        criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
-        ultimoLogin: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    } else {
-      await db.collection('usuarios').doc(user.uid).update({
-        ultimoLogin: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
     closeLogin();
-    await redirectToPortal(user);
+    const userData = await syncUser(user);
+    await redirectToPortal(user, userData);
   } catch (error) {
     console.error('Erro no login:', error);
     if (error.code !== 'auth/popup-closed-by-user') {
@@ -125,17 +179,15 @@ document.querySelector('.login-modal__submit').addEventListener('click', async (
   try {
     const result = await auth.signInWithEmailAndPassword(email, senha);
     closeLogin();
-    await redirectToPortal(result.user);
+    const userData = await syncUser(result.user);
+    await redirectToPortal(result.user, userData);
   } catch (error) {
     if (error.code === 'auth/user-not-found') {
       try {
         const newUser = await auth.createUserWithEmailAndPassword(email, senha);
-        await db.collection('usuarios').doc(newUser.user.uid).set({
-          email: email, tipo: 'visitante', status: 'ativo',
-          criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-        });
         closeLogin();
-        alert('Conta criada! Para acessar o portal, faca sua inscricao em um dos nossos cursos.');
+        const userData = await syncUser(newUser.user);
+        await redirectToPortal(newUser.user, userData);
       } catch (createError) {
         alert('Erro ao criar conta: ' + createError.message);
       }
@@ -146,48 +198,50 @@ document.querySelector('.login-modal__submit').addEventListener('click', async (
 });
 
 // ============================================
-// VERIFICAR SE ESTA LOGADO - update navbar
+// NAVBAR: mostra link do portal se logado
 // ============================================
 auth.onAuthStateChanged(async (user) => {
   const navLinks = document.querySelector('.nav__links');
   const enterLink = navLinks.querySelector('[onclick*="openLogin"]');
-  if (user && enterLink) {
-    let portalHref = '#';
-    let portalText = 'Meu Portal';
-    if (user.email === ADMIN_EMAIL) {
-      portalHref = 'admin.html'; portalText = 'Painel Admin';
-    } else {
+  if (!user || !enterLink) return;
+
+  let portalHref = '#';
+  let portalText = 'Meu Portal';
+
+  if (user.email === ADMIN_EMAIL) {
+    portalHref = 'admin.html'; portalText = 'Painel Admin';
+  } else {
+    try {
+      const ps = await db.collection('professores').where('email', '==', user.email).get();
+      if (!ps.empty) { portalHref = 'portal-professor.html'; portalText = 'Portal Professor'; }
+    } catch (e) {}
+    if (portalHref === '#') {
       try {
-        const ps = await db.collection('professores').where('email', '==', user.email).get();
-        if (!ps.empty) { portalHref = 'portal-professor.html'; portalText = 'Portal Professor'; }
+        const ud = await db.collection('usuarios').doc(user.uid).get();
+        if (ud.exists && ud.data().tipo === 'aluno' && ud.data().status === 'aprovado') {
+          portalHref = 'portal.html'; portalText = 'Portal do Aluno';
+        }
       } catch (e) {}
-      if (portalHref === '#') {
-        try {
-          const ud = await db.collection('usuarios').doc(user.uid).get();
-          if (ud.exists && ud.data().tipo === 'aluno' && ud.data().status === 'aprovado') {
-            portalHref = 'portal.html'; portalText = 'Portal do Aluno';
-          }
-        } catch (e) {}
-      }
     }
-    if (portalHref !== '#') {
-      const portalLink = document.createElement('a');
-      portalLink.href = portalHref;
-      portalLink.className = 'nav__portal';
-      portalLink.textContent = portalText;
-      enterLink.replaceWith(portalLink);
-    } else {
-      enterLink.textContent = (user.displayName || user.email.split('@')[0]);
-      enterLink.setAttribute('onclick', '');
-      enterLink.onclick = (e) => { e.preventDefault(); if (confirm('Deseja sair da conta?')) logout(); };
-    }
+  }
+
+  if (portalHref !== '#') {
+    const portalLink = document.createElement('a');
+    portalLink.href = portalHref;
+    portalLink.className = 'nav__portal';
+    portalLink.textContent = portalText;
+    enterLink.replaceWith(portalLink);
+  } else {
+    enterLink.textContent = (user.displayName || user.email.split('@')[0]);
+    enterLink.setAttribute('onclick', '');
+    enterLink.onclick = (e) => { e.preventDefault(); if (confirm('Deseja sair da conta?')) logout(); };
   }
 });
 
 function logout() { auth.signOut().then(() => { window.location.reload() }) }
 
 // ============================================
-// INSCRICAO DE CURSOS (no site principal)
+// INSCRICAO DE CURSOS
 // ============================================
 function openInscricaoModal(cursoNome) {
   const m = document.getElementById('inscricaoModal');
@@ -202,7 +256,6 @@ function openInscricaoModal(cursoNome) {
   m.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
-
 function closeInscricaoModal() {
   const m = document.getElementById('inscricaoModal');
   if (m) { m.classList.remove('active'); document.body.style.overflow = '' }
@@ -265,7 +318,7 @@ document.addEventListener('click', e => {
 });
 
 // ============================================
-// LOAD CURSOS DO FIRESTORE (dynamic cards)
+// LOAD CURSOS DO FIRESTORE
 // ============================================
 async function loadCursosSite() {
   try {
@@ -302,11 +355,10 @@ async function loadCursosSite() {
     grid.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   } catch (e) { console.error('Erro ao carregar cursos:', e) }
 }
-
 loadCursosSite();
 
 // ============================================
-// COOKIES BANNER
+// COOKIES
 // ============================================
 function acceptCookies() {
   document.getElementById('cookiesBanner').classList.add('hidden');
@@ -316,8 +368,4 @@ function declineCookies() {
   document.getElementById('cookiesBanner').classList.add('hidden');
   try { localStorage.setItem('cesfa_cookies', 'declined'); } catch (e) {}
 }
-try {
-  if (localStorage.getItem('cesfa_cookies')) {
-    document.getElementById('cookiesBanner').classList.add('hidden');
-  }
-} catch (e) {}
+try { if (localStorage.getItem('cesfa_cookies')) document.getElementById('cookiesBanner').classList.add('hidden'); } catch (e) {}

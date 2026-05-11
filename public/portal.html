@@ -132,11 +132,46 @@ a{text-decoration:none;color:inherit}button{cursor:pointer;border:none;backgroun
 firebase.initializeApp({apiKey:"AIzaSyBfIbx48JjQ0SbETDp4a-wwR9_lBAbhX70",authDomain:"cefas-website.firebaseapp.com",projectId:"cefas-website",storageBucket:"cefas-website.firebasestorage.app",messagingSenderId:"474668252634",appId:"1:474668252634:web:be627269a5a00de78294e3"});
 const auth=firebase.auth(),db=firebase.firestore();
 
+// Sync: find admin-registered doc by email, merge to UID
+async function syncUser(u){
+  const uid=u.uid,email=u.email;
+  const uidDoc=await db.collection('usuarios').doc(uid).get();
+  if(uidDoc.exists&&uidDoc.data().tipo&&uidDoc.data().tipo!=='visitante'){
+    return uidDoc.data();
+  }
+  const emailKey=email.replace(/[^a-zA-Z0-9]/g,'_');
+  const adminDoc=await db.collection('usuarios').doc(emailKey).get();
+  if(adminDoc.exists&&adminDoc.data().tipo==='aluno'){
+    const data=adminDoc.data();
+    await db.collection('usuarios').doc(uid).set({
+      nome:u.displayName||data.nome,email:email,foto:u.photoURL||'',
+      tipo:data.tipo,status:data.status,cursoNome:data.cursoNome||'',
+      telefone:data.telefone||'',criadoEm:data.criadoEm||firebase.firestore.FieldValue.serverTimestamp(),
+      ultimoLogin:firebase.firestore.FieldValue.serverTimestamp(),vinculadoDe:emailKey
+    });
+    await db.collection('usuarios').doc(emailKey).delete();
+    return{tipo:data.tipo,status:data.status};
+  }
+  const eq=await db.collection('usuarios').where('email','==',email).get();
+  let found=null;
+  eq.forEach(doc=>{if(doc.id!==uid&&doc.data().tipo==='aluno')found={id:doc.id,data:doc.data()}});
+  if(found){
+    await db.collection('usuarios').doc(uid).set({
+      nome:u.displayName||found.data.nome,email:email,foto:u.photoURL||'',
+      tipo:found.data.tipo,status:found.data.status,cursoNome:found.data.cursoNome||'',
+      criadoEm:found.data.criadoEm||firebase.firestore.FieldValue.serverTimestamp(),
+      ultimoLogin:firebase.firestore.FieldValue.serverTimestamp(),vinculadoDe:found.id
+    });
+    await db.collection('usuarios').doc(found.id).delete();
+    return{tipo:found.data.tipo,status:found.data.status};
+  }
+  return uidDoc.exists?uidDoc.data():null;
+}
+
 auth.onAuthStateChanged(async u=>{
   if(!u){location.href='index.html';return}
-  // Check if user is aluno
   let ud;
-  try{const doc=await db.collection('usuarios').doc(u.uid).get();ud=doc.exists?doc.data():null}catch(e){ud=null}
+  try{ud=await syncUser(u)}catch(e){ud=null}
   if(!ud||ud.tipo!=='aluno'||ud.status!=='aprovado'){
     document.getElementById('loading').style.display='none';
     document.getElementById('noauth').style.display='flex';
