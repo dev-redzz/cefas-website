@@ -89,6 +89,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 
 /* ══════ QUEM SOMOS ══════ */
 .about__grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about__full{font-size:1rem;color:var(--text-secondary);line-height:1.9;text-align:center}
+.about__full p{margin-bottom:20px;text-align:left}
 .about__text{font-size:1rem;color:var(--text-secondary);line-height:1.9}
 .about__text p{margin-bottom:20px}
 .about__image{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:16/10;background:var(--cream-dark)}
