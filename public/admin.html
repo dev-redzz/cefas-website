@@ -197,6 +197,7 @@ input,select,textarea{font-family:var(--fb);font-size:.88rem}
 <div class="fr"><div class="fg"><label class="fl">Vagas</label><input class="fi" id="cursoVagas" type="number"></div><div class="fg"><label class="fl">Duracao</label><input class="fi" id="cursoDur" placeholder="Ex: 6 meses"></div></div>
 <div class="fr"><div class="fg"><label class="fl">Horario</label><input class="fi" id="cursoHor" placeholder="Ex: Seg-Sex 14h-17h"></div><div class="fg"><label class="fl">Faixa Etaria</label><input class="fi" id="cursoIdade" placeholder="Ex: 8 a 16 anos"></div></div>
 <div class="fg"><label class="fl">Status</label><select class="fs" id="cursoStatus"><option value="aberto">Aberto</option><option value="fechado">Fechado</option></select></div>
+<div class="fg"><label class="fl">Imagem do Curso (URL)</label><input class="fi" id="cursoImg" placeholder="Cole o link da imagem ou deixe vazio"></div>
 <button class="btn btn-g" onclick="addCurso()">Criar Curso</button>
 </div></div></div>
 
@@ -205,6 +206,7 @@ input,select,textarea{font-family:var(--fb);font-size:.88rem}
 <div class="fg"><label class="fl">Titulo</label><input class="fi" id="noticTitulo"></div>
 <div class="fg"><label class="fl">Categoria</label><select class="fs" id="noticCat"><option>CESFA</option><option>Comunidade</option><option>Eventos</option><option>Educacao</option></select></div>
 <div class="fg"><label class="fl">Conteudo</label><textarea class="ft" id="noticConteudo" style="min-height:120px"></textarea></div>
+<div class="fg"><label class="fl">Imagem da Noticia (URL)</label><input class="fi" id="noticImg" placeholder="Cole o link da imagem ou deixe vazio"></div>
 <button class="btn btn-g" onclick="addNoticia()">Publicar Noticia</button>
 </div></div></div>
 
@@ -214,6 +216,7 @@ input,select,textarea{font-family:var(--fb);font-size:.88rem}
 <div class="fr"><div class="fg"><label class="fl">Data</label><input class="fi" id="evtData" type="date"></div><div class="fg"><label class="fl">Tipo</label><select class="fs" id="evtTipo"><option>Retiro</option><option>Encontro</option><option>Celebracao</option><option>Reuniao</option><option>Aula</option></select></div></div>
 <div class="fg"><label class="fl">Local</label><input class="fi" id="evtLocal" placeholder="Ex: CESFA - Caxias, MA"></div>
 <div class="fg"><label class="fl">Descricao</label><textarea class="ft" id="evtDesc"></textarea></div>
+<div class="fg"><label class="fl">Imagem do Evento (URL)</label><input class="fi" id="evtImg" placeholder="Cole o link da imagem ou deixe vazio"></div>
 <button class="btn btn-g" onclick="addEvento()">Criar Evento</button>
 </div></div></div>
 
@@ -405,9 +408,9 @@ async function loadCursos(){
 }
 
 async function addCurso(){
-  const n=document.getElementById('cursoNome').value.trim(),d=document.getElementById('cursoDesc').value.trim(),v=document.getElementById('cursoVagas').value,du=document.getElementById('cursoDur').value.trim(),ho=document.getElementById('cursoHor').value.trim(),id=document.getElementById('cursoIdade').value.trim(),s=document.getElementById('cursoStatus').value;
+  const n=document.getElementById('cursoNome').value.trim(),d=document.getElementById('cursoDesc').value.trim(),v=document.getElementById('cursoVagas').value,du=document.getElementById('cursoDur').value.trim(),ho=document.getElementById('cursoHor').value.trim(),id=document.getElementById('cursoIdade').value.trim(),s=document.getElementById('cursoStatus').value,img=document.getElementById('cursoImg').value.trim();
   if(!n){alert('Preencha o nome!');return}
-  await db.collection('cursos').add({nome:n,descricao:d,vagas:parseInt(v)||0,duracao:du,horario:ho,faixaEtaria:id,status:s,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+  await db.collection('cursos').add({nome:n,descricao:d,vagas:parseInt(v)||0,duracao:du,horario:ho,faixaEtaria:id,status:s,imagem:img,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
   alert('Curso criado!');closeModal('mAddCurso');loadCursos();loadDashStats();
 }
 async function removeCurso(id){if(confirm('Excluir este curso?')){await db.collection('cursos').doc(id).delete();loadCursos();loadDashStats()}}
@@ -427,9 +430,9 @@ async function loadNoticias(){
 }
 
 async function addNoticia(){
-  const t=document.getElementById('noticTitulo').value.trim(),c=document.getElementById('noticCat').value,co=document.getElementById('noticConteudo').value.trim();
+  const t=document.getElementById('noticTitulo').value.trim(),c=document.getElementById('noticCat').value,co=document.getElementById('noticConteudo').value.trim(),img=document.getElementById('noticImg').value.trim();
   if(!t){alert('Preencha o titulo!');return}
-  await db.collection('noticias').add({titulo:t,categoria:c,conteudo:co,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+  await db.collection('noticias').add({titulo:t,categoria:c,conteudo:co,imagem:img,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
   alert('Noticia publicada!');closeModal('mAddNoticia');loadNoticias();
 }
 async function removeNoticia(id){if(confirm('Excluir?')){await db.collection('noticias').doc(id).delete();loadNoticias()}}
@@ -449,9 +452,9 @@ async function loadEventos(){
 }
 
 async function addEvento(){
-  const n=document.getElementById('evtNome').value.trim(),d=document.getElementById('evtData').value,t=document.getElementById('evtTipo').value,l=document.getElementById('evtLocal').value.trim(),ds=document.getElementById('evtDesc').value.trim();
+  const n=document.getElementById('evtNome').value.trim(),d=document.getElementById('evtData').value,t=document.getElementById('evtTipo').value,l=document.getElementById('evtLocal').value.trim(),ds=document.getElementById('evtDesc').value.trim(),img=document.getElementById('evtImg').value.trim();
   if(!n||!d){alert('Preencha nome e data!');return}
-  await db.collection('eventos').add({nome:n,data:d,tipo:t,local:l,descricao:ds,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+  await db.collection('eventos').add({nome:n,data:d,tipo:t,local:l,descricao:ds,imagem:img,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});
   alert('Evento criado!');closeModal('mAddEvento');loadEventos();
 }
 async function removeEvento(id){if(confirm('Excluir?')){await db.collection('eventos').doc(id).delete();loadEventos()}}
